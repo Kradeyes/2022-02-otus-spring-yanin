@@ -1,1 +1,2 @@
-"# 2022-02-otus-spring-yanin" 
+
+The main branch for all assignments in the spring training course
