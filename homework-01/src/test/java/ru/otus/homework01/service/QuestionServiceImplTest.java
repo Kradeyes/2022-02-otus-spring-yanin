@@ -5,14 +5,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class QuestionsAndAnswersServiceGeneratorFromCsvTest {
+public class QuestionServiceImplTest {
     private static ClassPathXmlApplicationContext context;
-    private static QuestionsAndAnswersServiceGenerator service;
+    private static QuestionService service;
 
     @BeforeClass
     public static void setUpBeforeClass() {
         context = new ClassPathXmlApplicationContext("application-context.xml");
-        service = (QuestionsAndAnswersServiceGeneratorFromCsv) context.getBean("questionsAndAnswersFromCsv");
+        service = (QuestionServiceImpl) context.getBean("questionsAndAnswersFromCsv");
     }
 
     @AfterClass
@@ -22,6 +22,6 @@ public class QuestionsAndAnswersServiceGeneratorFromCsvTest {
 
     @Test
     public void generateQuestionsAndAnswersTest() {
-        service.generateQuestionsAndAnswers();
+        service.generateQuestion();
     }
 }
