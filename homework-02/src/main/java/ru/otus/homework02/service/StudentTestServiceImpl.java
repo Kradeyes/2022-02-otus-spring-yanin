@@ -12,7 +12,6 @@ import ru.otus.homework02.domain.Student;
 
 import java.util.Arrays;
 
-@Data
 @Service
 @RequiredArgsConstructor
 public class StudentTestServiceImpl implements StudentTestService {
