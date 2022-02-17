@@ -1,18 +1,23 @@
 package ru.otus.homework02.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Data
-@Configuration
-@PropertySource("classpath:application.properties")
+@Component
+@ConfigurationProperties(prefix = "app")
 public class QuestionsAndAnswersConfig {
 
-    @Value("${questions-and-answers}")
     private String questionsAndAnswers;
 
-    @Value("${right-answers}")
     private String rightAnswers;
+
+    private String questionsAndAnswersRu;
+
+    private String rightAnswersRu;
+
+    private String questionsAndAnswersFr;
+
+    private String rightAnswersFr;
 }

@@ -20,10 +20,10 @@ public class AnswerDaoImpl implements AnswerDao {
     private final QuestionsAndAnswersConfig config;
 
     @Override
-    public Answer receiveAnswer() {
+    public Answer receiveAnswer(String selectedLocale) {
         String line;
         String[] answersFromCsv = new String[0];
-        InputStream is = Main.class.getResourceAsStream(config.getRightAnswers());
+        InputStream is = Main.class.getResourceAsStream(getConfigForLanguage(selectedLocale));
         try (InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(is))) {
             try (BufferedReader br = new BufferedReader(streamReader)) {
                 while ((line = br.readLine()) != null) {
@@ -36,5 +36,17 @@ public class AnswerDaoImpl implements AnswerDao {
             e.printStackTrace();
         }
         return new Answer(answersFromCsv);
+    }
+
+    // Можно в теории сделать мапу если языков много
+    private String getConfigForLanguage(String selectedLocale) {
+        String configs = config.getRightAnswers();
+        if (selectedLocale.equals("ru-RU")) {
+            configs = config.getRightAnswersRu();
+        }
+        if (selectedLocale.equals("fr-FR")) {
+            configs = config.getRightAnswersFr();
+        }
+        return configs;
     }
 }

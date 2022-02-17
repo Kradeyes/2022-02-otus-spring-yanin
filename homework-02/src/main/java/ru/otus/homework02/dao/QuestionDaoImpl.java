@@ -21,9 +21,9 @@ public class QuestionDaoImpl implements QuestionDao {
     private final QuestionsAndAnswersConfig config;
 
     @Override
-    public Question receiveQuestion() {
+    public Question receiveQuestion(String selectedLocale) {
         String line;
-        InputStream is = Main.class.getResourceAsStream(config.getQuestionsAndAnswers());
+        InputStream is = Main.class.getResourceAsStream(getConfigForLanguage(selectedLocale));
         Map<String, List<String>> questionMap = new HashMap<>();
         try (InputStreamReader streamReader = new InputStreamReader(Objects.requireNonNull(is))) {
             try (BufferedReader br = new BufferedReader(streamReader)) {
@@ -50,6 +50,18 @@ public class QuestionDaoImpl implements QuestionDao {
 
     private List<String> getAnswers(String[] stringsFromCsv) {
         return Arrays.stream(stringsFromCsv).skip(1).collect(Collectors.toList());
+    }
+
+    // Можно в теории сделать мапу если языков много
+    private String getConfigForLanguage(String selectedLocale) {
+        String configs = config.getQuestionsAndAnswers();
+        if (selectedLocale.equals("ru-RU")) {
+            configs = config.getQuestionsAndAnswersRu();
+        }
+        if (selectedLocale.equals("fr-FR")) {
+            configs = config.getQuestionsAndAnswersFr();
+        }
+        return configs;
     }
 }
 

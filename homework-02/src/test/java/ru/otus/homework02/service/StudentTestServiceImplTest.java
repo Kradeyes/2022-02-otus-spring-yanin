@@ -42,9 +42,9 @@ class StudentTestServiceImplTest {
         HashMap<String, List<String>> questionMap = new HashMap<>();
         questionMap.put("How old are you", List.of("10", "20", "30"));
         Question question = new Question(questionMap);
-        when(questionDao.receiveQuestion()).thenReturn(question);
-        studentTestService.generateQuestion();
-        verify(questionDao, times(1)).receiveQuestion();
+        when(questionDao.receiveQuestion(any())).thenReturn(question);
+        studentTestService.generateQuestion(any());
+        verify(questionDao, times(1)).receiveQuestion(any());
     }
 
     @Test
@@ -71,11 +71,11 @@ class StudentTestServiceImplTest {
         String[] answerMassive = new String[]{"rightAnswer"};
         Answer answer = new Answer(answerMassive);
         Student student = new Student("Ivan", "Ivanov");
-        when(answerDao.receiveAnswer()).thenReturn(answer);
+        when(answerDao.receiveAnswer(any())).thenReturn(answer);
 
-        studentTestService.checkStudentAnswer("rightAnswer", student);
+        studentTestService.checkStudentAnswer("rightAnswer", student, "US");
 
-        verify(answerDao, times(1)).receiveAnswer();
+        verify(answerDao, times(1)).receiveAnswer(any());
         verify(studentDao, times(1)).increaseStudentScore(student);
     }
 }

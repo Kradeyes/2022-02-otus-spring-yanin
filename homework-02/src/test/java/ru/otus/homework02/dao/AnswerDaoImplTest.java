@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.homework02.config.QuestionsAndAnswersConfig;
 import ru.otus.homework02.domain.Answer;
-import ru.otus.homework02.service.StudentTestServiceImpl;
 
 import java.util.Arrays;
 
@@ -31,9 +30,9 @@ class AnswerDaoImplTest {
     @Test
     @DisplayName("получить список правильных ответов")
     void receiveAnswerTest() {
-        when(config.getRightAnswers()).thenReturn("/right_answers.csv");
+        when(config.getRightAnswers()).thenReturn("/answers/right_answers.csv");
         String[] expectedAnswerList = new String[]{"7", "Gosling", "2", "11", "366"};
-        Answer realAnswerList = answerDao.receiveAnswer();
+        Answer realAnswerList = answerDao.receiveAnswer("US");
         assertEquals(Arrays.toString(expectedAnswerList), Arrays.toString(realAnswerList.getAnswers()));
         verify(config, times(1)).getRightAnswers();
     }
