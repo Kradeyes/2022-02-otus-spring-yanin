@@ -1,0 +1,12 @@
+
+app:
+  questions-and-answers: /questions/questions_and_answers.csv
+  right-answers: /answers/right_answers.csv
+  questions-and-answers-ru: /questions/questions_and_answers_ru.csv
+  right-answers-ru: /answers/right_answers_ru.csv
+  questions-and-answers-fr: /questions/questions_and_answers_fr.csv
+  right-answers-fr: /answers/right_answers_ru.csv
+
+spring:
+  messages:
+    basename: i18n.messages

@@ -1,6 +1,5 @@
 package ru.otus.homework02.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.homework02.dao.AnswerDao;
@@ -21,8 +20,8 @@ public class StudentTestServiceImpl implements StudentTestService {
     private final AnswerDao answerDao;
 
     @Override
-    public Question generateQuestion() {
-        return questionDao.receiveQuestion();
+    public Question generateQuestion(String selectedLocale) {
+        return questionDao.receiveQuestion(selectedLocale);
     }
 
     @Override
@@ -36,11 +35,11 @@ public class StudentTestServiceImpl implements StudentTestService {
     }
 
     @Override
-    public void checkStudentAnswer(String answer, Student student) {
-        Answer rightAnswers = answerDao.receiveAnswer();
-        if (Arrays.stream(rightAnswers.getAnswers()).anyMatch(x-> x.contains(answer))) {
-                increaseStudentScore(student);
-            }
+    public void checkStudentAnswer(String answer, Student student, String selectedLocale) {
+        Answer rightAnswers = answerDao.receiveAnswer(selectedLocale);
+        if (Arrays.asList(rightAnswers.getAnswers()).contains(answer)) {
+            increaseStudentScore(student);
+        }
     }
 
     private void increaseStudentScore(Student student) {
