@@ -10,3 +10,5 @@ app:
 spring:
   messages:
     basename: i18n.messages
+  main:
+    allow-circular-references: true
