@@ -1,0 +1,72 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="2022-03-01--0001-authorsTableCreate" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authors"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="authors">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор автора">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Имя автора">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(255)" remarks="Фамилия автора">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-03-01--0001-genresTableCreate" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="genres"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="genres">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор жанра">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Название жанра">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-03-01--0001-booksTableCreate" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="books"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="books_seq_id" incrementBy="1" startValue="1"/>
+
+        <createTable tableName="books">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор книги">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="booktitle" type="varchar(255)" remarks="Название книги">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bookauthorid" type="bigint" remarks="Идентификатор автора">
+                <constraints nullable="false" foreignKeyName="fk_bookauthorid" references="authors(id)"/>
+            </column>
+            <column name="bookgenreid" type="bigint" remarks="Идентификатор жанра">
+                <constraints nullable="false" foreignKeyName="fk_bookgenreid" references="genres(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
+</databaseChangeLog>
