@@ -2,6 +2,7 @@ package ru.otus.homework02.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Service;
 import ru.otus.homework02.domain.Question;
 import ru.otus.homework02.domain.Student;
@@ -38,7 +39,6 @@ public class StudentTestStartServiceImpl implements StudentTestStartService {
                 + student.getName() + " "
                 + messageSource.getMessage("main.testResult", null, Locale.forLanguageTag(selectedLocale)) + " "
                 + studentTestService.getStudentScore(student));
-        in.close();
     }
 
     private String chooseLocale(String locale) {
