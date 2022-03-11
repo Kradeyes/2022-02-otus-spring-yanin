@@ -24,9 +24,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void createNewGenre(String name) {
-        if (!checkTheExistenceOfAGenre(name)) {
-            genreDao.insert(name);
+    public void createNewGenre(Genre genre) {
+        if (!checkTheExistenceOfAGenre(genre.getGenreName())) {
+            genreDao.insert(genre);
         }
     }
 

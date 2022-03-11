@@ -7,7 +7,7 @@ import java.util.List;
 public interface BookService {
     long getIdByBookTitleAndBookAuthorIdAndBookGenreId(String bookTitle, long bookAuthorId, long bookGenreId);
 
-    void createNewBook(String bookTitle, long bookAuthorId, long bookGenreId);
+    void createNewBook(Book book , boolean existingAuthorOrGenre);
 
     void deleteBook(long bookId);
 

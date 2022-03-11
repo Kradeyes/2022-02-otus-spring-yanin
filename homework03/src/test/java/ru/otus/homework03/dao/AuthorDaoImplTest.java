@@ -3,7 +3,8 @@ package ru.otus.homework03.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.homework03.domain.Author;
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
+@DataJpaTest
 @Import(AuthorDaoImpl.class)
 @DisplayName("Dao для работы с авторами должно: ")
 class AuthorDaoImplTest {
@@ -22,14 +23,17 @@ class AuthorDaoImplTest {
     @Autowired
     private AuthorDao authorDao;
 
+    @Autowired
+    private TestEntityManager em;
+
     @Test
     @DisplayName("добавлять автора в БД")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void insert() {
-        Author expectedAuthor = new Author(2, "Igor", "Ivanov");
-        authorDao.insert("Igor", "Ivanov");
-        Author actualAuthor = authorDao.getAllAuthors().get(1);
-        assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
+        Author expectedAuthor = AuthorGenerator.generateAuthor();
+        authorDao.insert(expectedAuthor);
+        Author actualAuthor = em.find(Author.class, 2L);
+        assertEquals(expectedAuthor, actualAuthor);
     }
 
     @Test
@@ -54,7 +58,7 @@ class AuthorDaoImplTest {
     @DisplayName("удалять автора")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void deleteAuthorById() {
-        authorDao.insert("ForDelete", "ForDelete");
+        authorDao.insert(AuthorGenerator.generateAuthor());
         authorDao.deleteAuthorById(2);
         assertEquals(1, authorDao.getAllAuthors().size());
     }

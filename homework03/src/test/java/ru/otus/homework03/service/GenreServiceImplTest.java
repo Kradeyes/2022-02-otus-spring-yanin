@@ -54,18 +54,20 @@ class GenreServiceImplTest {
     @Test
     @DisplayName("создать новый жанр")
     void createNewGenreTest() {
+        Genre genre = GenreGenerator.generateGenre();
         when(genreDao.getAllGenres()).thenReturn(new ArrayList<>());
-        genreService.createNewGenre("Horror");
-        verify(genreDao, times(1)).insert(any());
+        genreService.createNewGenre(genre);
+        verify(genreDao, times(1)).insert(genre);
     }
 
     @Test
     @DisplayName("не создать новый жанр, потому что он уже существует")
     void notCreateNewGenreTest() {
+        Genre genre = GenreGenerator.generateGenre();
         List<Genre> genresList = GenreGenerator.generateGenresList();
         when(genreDao.getAllGenres()).thenReturn(genresList);
-        genreService.createNewGenre("Horror");
-        verify(genreDao, times(0)).insert(any());
+        genreService.createNewGenre(genre);
+        verify(genreDao, times(0)).insert(genre);
     }
 
     @Test

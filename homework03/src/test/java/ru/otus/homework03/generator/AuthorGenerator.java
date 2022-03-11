@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorGenerator {
+    public static Author generateAuthor() {
+        Author author = new Author();
+        author.setName("Ivan");
+        author.setSurname("Ivanov");
+        return author;
+    }
+
     public static List<Author> generateAuthorsList() {
         List<Author> authorList = new ArrayList<>();
         Author author = new Author(1, "Ivan", "Ivanov");

@@ -1,68 +1,68 @@
 package ru.otus.homework03.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.homework03.domain.Book;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.*;
 import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
 public class BookDaoImpl implements BookDao {
-    private final NamedParameterJdbcOperations namedParameterJdbcOperations;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public void insert(String bookTitle, long bookAuthorId, long bookGenreId) {
-        namedParameterJdbcOperations.update("insert into books (`booktitle`, `bookauthorid`, `bookgenreid`) values (:booktitle, :bookauthorid, :bookgenreid)",
-                Map.of("booktitle", bookTitle, "bookauthorid", bookAuthorId, "bookgenreid", bookGenreId));
+    public void insert(Book book) {
+        em.persist(book);
+    }
+
+    @Override
+    public void insertWithExistingAuthorOrGenre(Book book) {
+        em.merge(book);
     }
 
     @Override
     public List<Book> getBookListByBookTitleAndBookAuthorIdAndBookGenreId(String bookTitle, long bookAuthorId, long bookGenreId) {
-        Map<String, Object> params = Map.of("booktitle", bookTitle, "bookauthorid", bookAuthorId, "bookgenreid", bookGenreId);
-        return namedParameterJdbcOperations.query(
-                "select * from books where booktitle = :booktitle and bookauthorid = :bookauthorid and bookgenreid = :bookgenreid", params, new BookMapper());
+        TypedQuery<Book> query = em.createQuery("select b from Book b " +
+                        "where b.bookTitle = :booktitle and b.author.id = :bookauthorid and b.genre.id = :bookgenreid",
+                Book.class);
+        query.setParameter("booktitle", bookTitle);
+        query.setParameter("bookauthorid", bookAuthorId);
+        query.setParameter("bookgenreid", bookGenreId);
+        return query.getResultList();
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return namedParameterJdbcOperations.query("select * from books", new BookMapper());
+        EntityGraph<?> entityGraph = em.getEntityGraph("otus-book-authors-entity-graph");
+        TypedQuery<Book> query = em.createQuery("select b from Book b join fetch b.genre", Book.class);
+        query.setHint("javax.persistence.fetchgraph", entityGraph);
+        return query.getResultList();
     }
 
     @Override
     public void deleteBookById(long id) {
-        Map<String, Object> params = Collections.singletonMap("id", id);
-        namedParameterJdbcOperations.update(
-                "delete from books where id = :id", params);
+        Query query = em.createQuery("delete from Book b where b.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     @Override
     public List<Book> findBooksByGenreId(long bookGenreId) {
-        Map<String, Object> params = Collections.singletonMap("bookgenreid", bookGenreId);
-        return namedParameterJdbcOperations.query(
-                "select * from books where bookgenreid = :bookgenreid", params, new BookMapper());
+        TypedQuery<Book> query = em.createQuery("select b from Book b where b.genre.id = :bookgenreid",
+                Book.class);
+        query.setParameter("bookgenreid", bookGenreId);
+        return query.getResultList();
     }
 
     @Override
     public List<Book> findBooksByAuthorId(long bookAuthorId) {
-        Map<String, Object> params = Collections.singletonMap("bookauthorid", bookAuthorId);
-        return namedParameterJdbcOperations.query(
-                "select * from books where bookauthorid = :bookauthorid", params, new BookMapper());
-    }
-
-    private static class BookMapper implements RowMapper<Book> {
-
-        @Override
-        public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getLong("id");
-            String bookTitle = resultSet.getString("booktitle");
-            long bookAuthorId = resultSet.getLong("bookauthorid");
-            long bookGenreId = resultSet.getLong("bookgenreid");
-            return new Book(id, bookTitle, bookAuthorId, bookGenreId);
-        }
+        TypedQuery<Book> query = em.createQuery("select b from Book b where b.author.id = :bookauthorid",
+                Book.class);
+        query.setParameter("bookauthorid", bookAuthorId);
+        return query.getResultList();
     }
 }

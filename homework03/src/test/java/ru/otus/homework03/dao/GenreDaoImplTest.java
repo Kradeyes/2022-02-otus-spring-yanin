@@ -3,7 +3,8 @@ package ru.otus.homework03.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.homework03.domain.Genre;
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
+@DataJpaTest
 @Import(GenreDaoImpl.class)
 @DisplayName("Dao для работы с жанрами должно: ")
 class GenreDaoImplTest {
@@ -22,14 +23,17 @@ class GenreDaoImplTest {
     @Autowired
     private GenreDao genreDao;
 
+    @Autowired
+    private TestEntityManager em;
+
     @Test
     @DisplayName("добавлять жанр в БД")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void insertTest() {
-        Genre expectedGenre = new Genre(2, "Drama");
-        genreDao.insert("Drama");
-        Genre actualGenre = genreDao.getAllGenres().get(1);
-        assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
+        Genre expectedGenre = GenreGenerator.generateGenre();
+        genreDao.insert(expectedGenre);
+        Genre actualGenre = em.find(Genre.class, 2L);
+        assertEquals(expectedGenre, actualGenre);
     }
 
     @Test
@@ -54,7 +58,7 @@ class GenreDaoImplTest {
     @DisplayName("удалять жанр")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void deleteGenreByIdTest() {
-        genreDao.insert("ForDelete");
+        genreDao.insert(GenreGenerator.generateGenre());
         genreDao.deleteGenreById(2);
         assertEquals(1, genreDao.getAllGenres().size());
     }

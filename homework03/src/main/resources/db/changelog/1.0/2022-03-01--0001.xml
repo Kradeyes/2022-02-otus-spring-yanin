@@ -49,8 +49,6 @@
             </not>
         </preConditions>
 
-        <createSequence sequenceName="books_seq_id" incrementBy="1" startValue="1"/>
-
         <createTable tableName="books">
             <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор книги">
                 <constraints primaryKey="true" nullable="false"/>
@@ -67,6 +65,27 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2022-03-11--0001-commentariesTableCreate" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="commentaries"/>
+            </not>
+        </preConditions>
 
+        <createTable tableName="commentaries">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор книги">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Название комментария">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="varchar(255)" remarks="Содержание комментария">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="bigint" remarks="Идентификатор жанра">
+                <constraints nullable="false" foreignKeyName="fk_book_id" references="books(id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

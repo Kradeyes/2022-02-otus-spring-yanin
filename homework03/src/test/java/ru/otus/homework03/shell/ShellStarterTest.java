@@ -10,6 +10,14 @@ import org.springframework.shell.Shell;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
+import ru.otus.homework03.domain.Author;
+import ru.otus.homework03.domain.Book;
+import ru.otus.homework03.domain.Commentary;
+import ru.otus.homework03.domain.Genre;
+import ru.otus.homework03.generator.AuthorGenerator;
+import ru.otus.homework03.generator.BookGenerator;
+import ru.otus.homework03.generator.CommentaryGenerator;
+import ru.otus.homework03.generator.GenreGenerator;
 import ru.otus.homework03.service.LibraryService;
 import ru.otus.homework03.service.ScannerService;
 
@@ -40,14 +48,17 @@ class ShellStarterTest {
     private static final String COMMAND_CREATE_BOOK = "cnb";
     private static final String COMMAND_DELETE_BOOK = "db";
     private static final String COMMAND_SHOW_ALL_BOOKS = "sab";
+    private static final String COMMAND_CREATE_COMMENTARY = "cnc";
+    private static final String COMMAND_DELETE_COMMENTARY = "dc";
+    private static final String COMMAND_SHOW_ALL_COMMENTARIES_FOR_BOOK = "sacfb";
 
 
     @DisplayName("должен запустить создание нового жанра")
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void createNewGenreTest() {
-        String genre = "Horror";
-        when(scannerService.userInput()).thenReturn(genre);
+        Genre genre = GenreGenerator.generateGenre();
+        when(scannerService.userInput()).thenReturn(genre.getGenreName());
         shell.evaluate(() -> COMMAND_CREATE_GENRE);
         verify(service, times(1)).createNewGenre(genre);
     }
@@ -74,11 +85,10 @@ class ShellStarterTest {
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void createNewAuthorTest() {
-        String name = "Ivan";
-        String surname = "Ivanov";
-        when(scannerService.userInput()).thenReturn(name, surname);
+        Author author = AuthorGenerator.generateAuthor();
+        when(scannerService.userInput()).thenReturn(author.getName(), author.getSurname());
         shell.evaluate(() -> COMMAND_CREATE_AUTHOR);
-        verify(service, times(1)).createNewAuthor(name, surname);
+        verify(service, times(1)).createNewAuthor(author);
     }
 
     @DisplayName("должен запустить удаление автора")
@@ -104,13 +114,13 @@ class ShellStarterTest {
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void createNewBookTest() {
-        String bookTitle = "SomeBook";
+        String bookTitle = "someTitle";
         String name = "Ivan";
         String surname = "Ivanov";
         String genre = "Horror";
         when(scannerService.userInput()).thenReturn(bookTitle, name, surname, genre);
         shell.evaluate(() -> COMMAND_CREATE_BOOK);
-        verify(service, times(1)).createNewBook(bookTitle, name, surname, genre);
+        verify(service, times(1)).createNewBook(BookGenerator.generateBook());
     }
 
     @DisplayName("должен запустить удаление книги")
@@ -132,5 +142,37 @@ class ShellStarterTest {
     void showAllBooksTest() {
         shell.evaluate(() -> COMMAND_SHOW_ALL_BOOKS);
         verify(service, times(1)).showAllBooks(messageSource);
+    }
+
+    @DisplayName("должен запустить создание нового комментария")
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void createNewCommentaryTest() {
+        Commentary commentary = CommentaryGenerator.generateCommentary();
+        Book book = BookGenerator.generateBook();
+        when(scannerService.userInput()).thenReturn(book.getBookTitle(), book.getAuthor().getName(),
+                book.getAuthor().getSurname(), book.getGenre().getGenreName(), commentary.getName(), commentary.getContent());
+        shell.evaluate(() -> COMMAND_CREATE_COMMENTARY);
+        verify(service, times(1)).createNewCommentary(commentary, book, messageSource);
+    }
+
+    @DisplayName("должен запустить удаление комментария")
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void deleteCommentaryTest() {
+        String commentaryName = CommentaryGenerator.generateCommentary().getName();
+        when(scannerService.userInput()).thenReturn(commentaryName);
+        shell.evaluate(() -> COMMAND_DELETE_COMMENTARY);
+        verify(service, times(1)).deleteCommentary(commentaryName, messageSource);
+    }
+
+    @DisplayName("должен запустить вывод всех комментариев для книги")
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void showAllCommentariesForBookTest() {
+        Book book = BookGenerator.generateBook();
+        when(scannerService.userInput()).thenReturn(book.getBookTitle(), book.getAuthor().getName(), book.getAuthor().getSurname(), book.getGenre().getGenreName());
+        shell.evaluate(() -> COMMAND_SHOW_ALL_COMMENTARIES_FOR_BOOK);
+        verify(service, times(1)).showAllCommentariesByBookId(book, messageSource);
     }
 }

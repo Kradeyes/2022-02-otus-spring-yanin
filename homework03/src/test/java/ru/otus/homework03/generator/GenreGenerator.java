@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenreGenerator {
+    public static Genre generateGenre() {
+        Genre genre = new Genre();
+        genre.setGenreName("Horror");
+        return genre;
+    }
+
     public static List<Genre> generateGenresList() {
         List<Genre> genresList = new ArrayList<>();
         Genre genre = new Genre(1, "Horror");

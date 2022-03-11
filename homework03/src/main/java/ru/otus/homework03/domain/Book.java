@@ -1,13 +1,32 @@
 package ru.otus.homework03.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "books")
+@NamedEntityGraph(name = "otus-book-authors-entity-graph",
+        attributeNodes = {@NamedAttributeNode("author")})
 public class Book {
-    private final long id;
-    private final String bookTitle;
-    private final long bookAuthorId;
-    private final long bookGenreId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "booktitle")
+    private String bookTitle;
+
+    @ManyToOne(targetEntity = Author.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "bookauthorid")
+    private Author author;
+
+    @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "bookgenreid")
+    private Genre genre;
+
 }
