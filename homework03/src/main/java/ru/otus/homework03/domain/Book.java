@@ -11,8 +11,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
-@NamedEntityGraph(name = "otus-book-authors-entity-graph",
-        attributeNodes = {@NamedAttributeNode("author")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +26,4 @@ public class Book {
     @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "bookgenreid")
     private Genre genre;
-
 }

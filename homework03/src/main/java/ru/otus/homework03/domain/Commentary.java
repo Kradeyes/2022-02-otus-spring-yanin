@@ -11,8 +11,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "commentaries")
-@NamedEntityGraph(name = "otus-commentary-books-entity-graph",
-        attributeNodes = {@NamedAttributeNode("book")})
 public class Commentary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +22,7 @@ public class Commentary {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(targetEntity = Book.class, cascade = CascadeType.REMOVE)
+    @ManyToOne(targetEntity = Book.class)
     @JoinColumn(name = "book_id")
     private Book book;
 }

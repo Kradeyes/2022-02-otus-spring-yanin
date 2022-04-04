@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.homework03.dao.GenreDao;
+import ru.otus.homework03.repository.GenreRepository;
 import ru.otus.homework03.domain.Genre;
 import ru.otus.homework03.generator.GenreGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,69 +21,69 @@ import static org.mockito.Mockito.*;
 @DisplayName("Класс сервиса жанров должен: ")
 class GenreServiceImplTest {
     @Mock
-    private GenreDao genreDao;
+    private GenreRepository genreRepository;
 
     private GenreService genreService;
 
     @BeforeEach
     void setUp() {
-        genreService = new GenreServiceImpl(genreDao);
+        genreService = new GenreServiceImpl(genreRepository);
     }
 
     @Test
     @DisplayName("найти ID жанра и вернуть его")
     void getIdByGenreNameWithFoundIdTest() {
-        List<Genre> genresList = GenreGenerator.generateGenresList();
+        Optional<Genre> genre = GenreGenerator.generateOptionalGenre();
         long expectedGenreId = 1;
-        when(genreDao.getGenreListByGenreName(any())).thenReturn(genresList);
+        when(genreRepository.findGenreByGenreName(any())).thenReturn(genre);
         long actualGenreId = genreService.getIdByGenreName("Horror");
         assertEquals(expectedGenreId, actualGenreId);
-        verify(genreDao, times(1)).getGenreListByGenreName(any());
+        verify(genreRepository, times(1)).findGenreByGenreName(any());
     }
 
     @Test
     @DisplayName("не найти ID жанра и вернуть 0")
     void getIdByGenreNameWithNotFoundIdTest() {
         long expectedGenreId = 0;
-        when(genreDao.getGenreListByGenreName(any())).thenReturn(new ArrayList<>());
+        when(genreRepository.findGenreByGenreName(any())).thenReturn(Optional.empty());
         long actualGenreId = genreService.getIdByGenreName("Horror");
         assertEquals(expectedGenreId, actualGenreId);
-        verify(genreDao, times(1)).getGenreListByGenreName(any());
+        verify(genreRepository, times(1)).findGenreByGenreName(any());
     }
 
     @Test
     @DisplayName("создать новый жанр")
     void createNewGenreTest() {
         Genre genre = GenreGenerator.generateGenre();
-        when(genreDao.getAllGenres()).thenReturn(new ArrayList<>());
+        when(genreRepository.findGenreByGenreName(any())).thenReturn(Optional.empty());
         genreService.createNewGenre(genre);
-        verify(genreDao, times(1)).insert(genre);
+        verify(genreRepository, times(1)).save(genre);
     }
 
     @Test
     @DisplayName("не создать новый жанр, потому что он уже существует")
     void notCreateNewGenreTest() {
         Genre genre = GenreGenerator.generateGenre();
-        List<Genre> genresList = GenreGenerator.generateGenresList();
-        when(genreDao.getAllGenres()).thenReturn(genresList);
+        Optional<Genre> optionalGenre = GenreGenerator.generateOptionalGenre();
+        when(genreRepository.findGenreByGenreName(any())).thenReturn(optionalGenre);
         genreService.createNewGenre(genre);
-        verify(genreDao, times(0)).insert(genre);
+        verify(genreRepository, times(0)).save(genre);
     }
 
     @Test
     @DisplayName("удалить жанр по ID")
     void deleteGenreTest() {
         genreService.deleteGenre(1);
-        verify(genreDao, times(1)).deleteGenreById(1);
+        verify(genreRepository, times(1)).deleteGenreById(1);
     }
 
     @Test
     @DisplayName("вернуть список всех жанров")
     void getAllGenresTest() {
         List<Genre> expectedGenresList = GenreGenerator.generateGenresList();
-        when(genreDao.getAllGenres()).thenReturn(expectedGenresList);
+        when(genreRepository.findAll()).thenReturn(expectedGenresList);
         List<Genre> actualGenresList = genreService.getAllGenres();
         assertEquals(expectedGenresList, actualGenresList);
-        verify(genreDao, times(1)).getAllGenres();
+        verify(genreRepository, times(1)).findAll();
     }
 }

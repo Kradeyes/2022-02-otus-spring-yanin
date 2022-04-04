@@ -7,6 +7,7 @@ import ru.otus.homework03.domain.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BookGenerator {
     public static Book generateBookWithIdForAll() {
@@ -31,5 +32,10 @@ public class BookGenerator {
         Book book = new Book(1, "someTitle", new Author(1, "Ivan", "Ivanov"), new Genre(1, "Horror"));
         bookList.add(book);
         return bookList;
+    }
+
+    public static Optional<Book> generateOptionalBook() {
+        Book book = new Book(1, "someTitle", new Author(1, "Ivan", "Ivanov"), new Genre(1, "Horror"));
+        return Optional.of(book);
     }
 }
