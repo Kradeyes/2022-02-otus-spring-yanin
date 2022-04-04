@@ -24,9 +24,9 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void createNewAuthor(String name, String surname) {
-        if (!checkTheExistenceOfTheAuthor(name, surname)) {
-            authorDao.insert(name, surname);
+    public void createNewAuthor(Author author) {
+        if (!checkTheExistenceOfTheAuthor(author.getName(), author.getSurname())) {
+            authorDao.insert(author);
         }
     }
 
@@ -43,9 +43,9 @@ public class AuthorServiceImpl implements AuthorService {
     private boolean checkTheExistenceOfTheAuthor(String name, String surname) {
         List<Author> authorList = authorDao.getAllAuthors();
         boolean rsl = false;
-        Optional<Author> optionalGenre = authorList.stream().filter(x -> x.getName().equals(name) &&
+        Optional<Author> optionalAuthor = authorList.stream().filter(x -> x.getName().equals(name) &&
                 x.getSurname().equals(surname)).findFirst();
-        if (optionalGenre.isPresent()) {
+        if (optionalAuthor.isPresent()) {
             rsl = true;
         }
         return rsl;

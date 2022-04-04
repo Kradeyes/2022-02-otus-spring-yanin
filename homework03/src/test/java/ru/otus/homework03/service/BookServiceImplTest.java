@@ -91,18 +91,30 @@ class BookServiceImplTest {
     @Test
     @DisplayName("создать новую книгу")
     void createNewBookTest() {
+        Book book = BookGenerator.generateBook();
         when(bookDao.getAllBooks()).thenReturn(new ArrayList<>());
-        bookService.createNewBook("someTitle", 1, 1);
-        verify(bookDao, times(1)).insert("someTitle", 1, 1);
+        bookService.createNewBook(book, Boolean.FALSE);
+        verify(bookDao, times(1)).insert(book);
+    }
+
+    @Test
+    @DisplayName("создать новую книгу, но существуюшими авторами или жанрами")
+    void createNewBookWithExistingAuthorOrGenreTest() {
+        Book book = BookGenerator.generateBook();
+        when(bookDao.getAllBooks()).thenReturn(new ArrayList<>());
+        bookService.createNewBook(book, Boolean.TRUE);
+        verify(bookDao, times(1)).insertWithExistingAuthorOrGenre(book);
     }
 
     @Test
     @DisplayName("не создать новую книгу, потому что она уже существует")
     void notCreateNewBookTest() {
+        Book book = BookGenerator.generateBookWithIdForAll();
         List<Book> bookList = BookGenerator.generateBooksList();
         when(bookDao.getAllBooks()).thenReturn(bookList);
-        bookService.createNewBook("someTitle", 1, 1);
-        verify(bookDao, times(0)).insert("someTitle", 1, 1);
+        bookService.createNewBook(book, Boolean.TRUE);
+        verify(bookDao, times(0)).insert(book);
+        verify(bookDao, times(0)).insertWithExistingAuthorOrGenre(book);
     }
 
     @Test

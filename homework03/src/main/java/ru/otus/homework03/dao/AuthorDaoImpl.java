@@ -1,53 +1,44 @@
 package ru.otus.homework03.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.homework03.domain.Author;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.*;
 import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
 public class AuthorDaoImpl implements AuthorDao {
-    private final NamedParameterJdbcOperations namedParameterJdbcOperations;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public void insert(String name, String surname) {
-        namedParameterJdbcOperations.update("insert into authors (`name`, `surname`) values (:name, :surname)",
-                Map.of("name", name, "surname", surname));
+    public void insert(Author author) {
+        em.persist(author);
     }
 
     @Override
     public List<Author> getAuthorListByAuthorNameAndAuthorSurname(String name, String surname) {
-        Map<String, Object> params = Map.of("name", name, "surname", surname);
-        return namedParameterJdbcOperations.query(
-                "select * from authors where name = :name and surname = :surname", params, new AuthorMapper());
+        TypedQuery<Author> query = em.createQuery("select a from Author a where a.name = :name and a.surname = :surname",
+                Author.class);
+        query.setParameter("name", name);
+        query.setParameter("surname", surname);
+        return query.getResultList();
     }
 
     @Override
     public List<Author> getAllAuthors() {
-        return namedParameterJdbcOperations.query("select * from authors", new AuthorMapper());
+        TypedQuery<Author> query = em.createQuery("select a from Author a",
+                Author.class);
+        return query.getResultList();
     }
 
     @Override
     public void deleteAuthorById(long id) {
-        Map<String, Object> params = Collections.singletonMap("id", id);
-        namedParameterJdbcOperations.update(
-                "delete from authors where id = :id", params);
-    }
-
-    private static class AuthorMapper implements RowMapper<Author> {
-
-        @Override
-        public Author mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getLong("id");
-            String name = resultSet.getString("name");
-            String surname = resultSet.getString("surname");
-            return new Author(id, name, surname);
-        }
+        Query query = em.createQuery("delete from Author a where a.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 }

@@ -5,7 +5,7 @@ import ru.otus.homework03.domain.Author;
 import java.util.List;
 
 public interface AuthorDao {
-    void insert(String name, String surname);
+    void insert(Author author);
 
     List<Author> getAuthorListByAuthorNameAndAuthorSurname(String name, String surname);
 

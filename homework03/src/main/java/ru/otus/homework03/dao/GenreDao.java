@@ -5,7 +5,7 @@ import ru.otus.homework03.domain.Genre;
 import java.util.List;
 
 public interface GenreDao {
-    void insert(String name);
+    void insert(Genre genre);
 
     List<Genre> getGenreListByGenreName(String name);
 

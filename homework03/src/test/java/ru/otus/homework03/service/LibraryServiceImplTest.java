@@ -7,8 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
+import ru.otus.homework03.domain.Author;
+import ru.otus.homework03.domain.Book;
+import ru.otus.homework03.domain.Commentary;
+import ru.otus.homework03.domain.Genre;
 import ru.otus.homework03.generator.AuthorGenerator;
 import ru.otus.homework03.generator.BookGenerator;
+import ru.otus.homework03.generator.CommentaryGenerator;
 import ru.otus.homework03.generator.GenreGenerator;
 
 import java.util.ArrayList;
@@ -26,20 +31,23 @@ class LibraryServiceImplTest {
     @Mock
     private GenreService genreService;
     @Mock
+    private CommentaryService commentaryService;
+    @Mock
     private MessageSource messageSource;
 
     private LibraryService libraryService;
 
     @BeforeEach
     void setUp() {
-        libraryService = new LibraryServiceImpl(authorService, bookService, genreService);
+        libraryService = new LibraryServiceImpl(authorService, bookService, genreService, commentaryService);
     }
 
     @Test
     @DisplayName("создать новый жанр")
     void createNewGenreTest() {
-        libraryService.createNewGenre("Horror");
-        verify(genreService, times(1)).createNewGenre("Horror");
+        Genre genre = GenreGenerator.generateGenre();
+        libraryService.createNewGenre(genre);
+        verify(genreService, times(1)).createNewGenre(genre);
     }
 
     @Test
@@ -87,8 +95,9 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("создать нового автора")
     void createNewAuthor() {
-        libraryService.createNewAuthor("Ivan", "Ivanov");
-        verify(authorService, times(1)).createNewAuthor("Ivan", "Ivanov");
+        Author author = AuthorGenerator.generateAuthor();
+        libraryService.createNewAuthor(author);
+        verify(authorService, times(1)).createNewAuthor(author);
     }
 
     @Test
@@ -135,46 +144,104 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("создать новую книгу")
     void createNewBook() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan","Ivanov")).thenReturn(1L);
+        Book book = BookGenerator.generateBook();
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
         when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        libraryService.createNewBook("someTitle", "Ivan", "Ivanov", "Horror");
-        verify(genreService, times(1)).createNewGenre("Horror");
-        verify(authorService, times(1)).createNewAuthor("Ivan", "Ivanov");
-        verify(genreService, times(1)).createNewGenre("Horror");
-        verify(bookService, times(1)).createNewBook("someTitle", 1, 1);
+        libraryService.createNewBook(book);
+        verify(bookService, times(1)).createNewBook(book, Boolean.TRUE);
     }
 
     @Test
     @DisplayName("удалить книгу")
     void deleteBookTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan","Ivanov")).thenReturn(1L);
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
         when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
         when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
-        libraryService.deleteBook("someTitle","Ivan","Ivanov","Horror", messageSource);
+        libraryService.deleteBook("someTitle", "Ivan", "Ivanov", "Horror", messageSource);
         verify(bookService, times(1)).deleteBook(1L);
     }
 
     @Test
     @DisplayName("не удалять книгу, потому что её не существует")
     void notDeleteBookBecauseBookNotExistTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan","Ivanov")).thenReturn(1L);
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
         when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
         when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(0L);
-        libraryService.deleteBook("someTitle","Ivan","Ivanov","Horror", messageSource);
+        libraryService.deleteBook("someTitle", "Ivan", "Ivanov", "Horror", messageSource);
         verify(bookService, times(0)).deleteBook(0L);
     }
 
     @Test
     @DisplayName("вывести список всех книг")
-    void showAllBooks() {
+    void showAllBooksTest() {
         when(bookService.getAllBooks()).thenReturn(BookGenerator.generateBooksList());
         libraryService.showAllBooks(messageSource);
     }
 
     @Test
     @DisplayName("не выводить список книг, потому что их не существует")
-    void notShowAllBooks() {
+    void notShowAllBooksTest() {
         when(bookService.getAllBooks()).thenReturn(new ArrayList<>());
         libraryService.showAllBooks(messageSource);
+    }
+
+    @Test
+    @DisplayName("создать новый комментарий")
+    void createNewCommentaryTest() {
+        Commentary finalCommentary = CommentaryGenerator.generateCommentary();
+        finalCommentary.setBook(BookGenerator.generateBookWithIdForAll());
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
+        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
+        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
+        libraryService.createNewCommentary(CommentaryGenerator.generateCommentary(), BookGenerator.generateBook(), messageSource);
+        verify(commentaryService, times(1)).createNewCommentary(finalCommentary);
+    }
+
+    @Test
+    @DisplayName("не создавать новый комментарий, потому что книги не существует")
+    void notCreateNewCommentaryTest() {
+        Commentary finalCommentary = CommentaryGenerator.generateCommentary();
+        finalCommentary.setBook(BookGenerator.generateBookWithIdForAll());
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
+        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
+        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(0L);
+        libraryService.createNewCommentary(CommentaryGenerator.generateCommentary(), BookGenerator.generateBook(), messageSource);
+        verify(commentaryService, times(0)).createNewCommentary(finalCommentary);
+    }
+
+    @Test
+    @DisplayName("удалить комментарий")
+    void deleteCommentaryTest() {
+        when(commentaryService.getIdByCommentaryName(any())).thenReturn(1L);
+        libraryService.deleteCommentary("good comment", messageSource);
+        verify(commentaryService, times(1)).deleteCommentary(1L);
+    }
+
+    @Test
+    @DisplayName("не удалять комментарий, потому что его не существует")
+    void dontDeleteCommentaryBecauseCommentaryNotExistTest() {
+        when(commentaryService.getIdByCommentaryName(any())).thenReturn(0L);
+        libraryService.deleteCommentary("good comment", messageSource);
+        verify(commentaryService, times(0)).deleteCommentary(0L);
+    }
+
+    @Test
+    @DisplayName("вывести список всех комментариев для книги")
+    void showAllCommentaryForBookTest() {
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
+        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
+        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
+        when(commentaryService.getAllCommentariesByBookId(1L)).thenReturn(CommentaryGenerator.generateCommentaryList());
+        libraryService.showAllCommentariesByBookId(BookGenerator.generateBook(), messageSource);
+    }
+
+    @Test
+    @DisplayName("не выводить список комментариев, потому что их не существует")
+    void notShowAllCommentaryForBookTest() {
+        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
+        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
+        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
+        when(commentaryService.getAllCommentariesByBookId(1L)).thenReturn(new ArrayList<>());
+        libraryService.showAllCommentariesByBookId(BookGenerator.generateBook(), messageSource);
     }
 }

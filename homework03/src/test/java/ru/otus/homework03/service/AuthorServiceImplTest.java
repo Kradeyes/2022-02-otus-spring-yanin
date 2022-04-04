@@ -56,18 +56,20 @@ class AuthorServiceImplTest {
     @Test
     @DisplayName("создать нового автора")
     void createNewAuthorTest() {
+        Author author = AuthorGenerator.generateAuthor();
         when(authorDao.getAllAuthors()).thenReturn(new ArrayList<>());
-        authorService.createNewAuthor("Ivan", "Ivanov");
-        verify(authorDao, times(1)).insert(any(), any());
+        authorService.createNewAuthor(author);
+        verify(authorDao, times(1)).insert(author);
     }
 
     @Test
     @DisplayName("не создать нового автора, потому что он уже существует")
     void notCreateNewAuthorTest() {
+        Author author = AuthorGenerator.generateAuthor();
         List<Author> authorList = AuthorGenerator.generateAuthorsList();
         when(authorDao.getAllAuthors()).thenReturn(authorList);
-        authorService.createNewAuthor("Ivan", "Ivanov");
-        verify(authorDao, times(0)).insert(any(), any());
+        authorService.createNewAuthor(author);
+        verify(authorDao, times(0)).insert(author);
     }
 
 

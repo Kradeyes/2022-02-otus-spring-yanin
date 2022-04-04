@@ -28,17 +28,21 @@ public class BookServiceImpl implements BookService {
     @Override
     public long getIdByBookTitleAndBookAuthorIdAndBookGenreId(String bookTitle, long bookAuthorId, long bookGenreId) {
         long id = 0;
-        List<Book> authorList = bookDao.getBookListByBookTitleAndBookAuthorIdAndBookGenreId(bookTitle, bookAuthorId, bookGenreId);
-        if (!authorList.isEmpty()) {
-            id = authorList.get(0).getId();
+        List<Book> bookList = bookDao.getBookListByBookTitleAndBookAuthorIdAndBookGenreId(bookTitle, bookAuthorId, bookGenreId);
+        if (!bookList.isEmpty()) {
+            id = bookList.get(0).getId();
         }
         return id;
     }
 
     @Override
-    public void createNewBook(String bookTitle, long bookAuthorId, long bookGenreId) {
-        if (!checkTheExistenceOfABook(bookTitle, bookAuthorId, bookGenreId)) {
-            bookDao.insert(bookTitle, bookAuthorId, bookGenreId);
+    public void createNewBook(Book book, boolean existingAuthorOrGenre) {
+        boolean bookExist = checkTheExistenceOfABook(book);
+        if (!bookExist && !existingAuthorOrGenre) {
+            bookDao.insert(book);
+        }
+        if (!bookExist && existingAuthorOrGenre) {
+            bookDao.insertWithExistingAuthorOrGenre(book);
         }
     }
 
@@ -52,13 +56,11 @@ public class BookServiceImpl implements BookService {
         return bookDao.getAllBooks();
     }
 
-    private boolean checkTheExistenceOfABook(String bookTitle, long bookAuthorId, long bookGenreId) {
+    private boolean checkTheExistenceOfABook(Book book) {
         List<Book> bookList = bookDao.getAllBooks();
         boolean rsl = false;
-        Optional<Book> optionalGenre = bookList.stream().filter(x -> x.getBookTitle().equals(bookTitle) &&
-                x.getBookAuthorId() == bookAuthorId &&
-                x.getBookGenreId() == bookGenreId).findFirst();
-        if (optionalGenre.isPresent()) {
+        Optional<Book> optionalBook = bookList.stream().filter(x -> x.equals(book)).findFirst();
+        if (optionalBook.isPresent()) {
             rsl = true;
         }
         return rsl;
