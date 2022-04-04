@@ -1,0 +1,9 @@
+spring:
+  messages:
+    basename: i18n.messages
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    initialization-mode: always
+    data: test.sql
