@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.CommentaryRepository;
 import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.generator.CommentaryGenerator;
@@ -13,6 +14,7 @@ import ru.otus.homework03.generator.CommentaryGenerator;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -44,8 +46,8 @@ class CommentaryServiceImplTest {
         Commentary commentary = CommentaryGenerator.generateCommentary();
         Optional<Commentary> optionalCommentary = CommentaryGenerator.generateOptionalCommentary();
         when(commentaryRepository.findCommentaryByName(any())).thenReturn(optionalCommentary);
-        commentaryService.createNewCommentary(commentary);
-        verify(commentaryRepository, times(0)).save(commentary);
+        assertThatThrownBy(() -> commentaryService.createNewCommentary(commentary))
+                .isInstanceOf(ImpossibilityCreationException.class);
     }
 
     @Test
@@ -84,5 +86,13 @@ class CommentaryServiceImplTest {
         List<Commentary> actualCommentaryList = commentaryService.getAllCommentariesByBookId(1L);
         assertEquals(expectedCommentaryList, actualCommentaryList);
         verify(commentaryRepository, times(1)).findCommentariesByBook_Id(1L);
+    }
+
+    @Test
+    @DisplayName("найти комментарий по ID")
+    void findCommentaryById() {
+        when(commentaryRepository.findById(any())).thenReturn(CommentaryGenerator.generateOptionalCommentary());
+        commentaryService.findCommentaryById(1L);
+        verify(commentaryRepository, times(1)).findById(any());
     }
 }

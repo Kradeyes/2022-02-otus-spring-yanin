@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.BookRepository;
 import ru.otus.homework03.domain.Book;
 import ru.otus.homework03.generator.BookGenerator;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -28,6 +30,14 @@ class BookServiceImplTest {
     @BeforeEach
     void setUp() {
         bookService = new BookServiceImpl(bookRepository);
+    }
+
+    @Test
+    @DisplayName("найти книгу по ID")
+    void findBookByIdTest() {
+        when(bookRepository.findById(any())).thenReturn(BookGenerator.generateOptionalBook());
+        Optional<Book> optionalBook = bookService.findBookById(1L);
+        assertEquals(Boolean.FALSE, optionalBook.isEmpty());
     }
 
     @Test
@@ -98,25 +108,16 @@ class BookServiceImplTest {
         verify(bookRepository, times(1)).save(book);
     }
 
-//    @Test
-//    @DisplayName("создать новую книгу, но существуюшими авторами или жанрами")
-//    void createNewBookWithExistingAuthorOrGenreTest() {
-//        Book book = BookGenerator.generateBook();
-//        when(bookRepository.findAll()).thenReturn(new ArrayList<>());
-//        bookService.createNewBook(book, Boolean.TRUE);
-//        verify(bookRepository, times(1)).insertWithExistingAuthorOrGenre(book);
-//    }
-//
-//    @Test
-//    @DisplayName("не создать новую книгу, потому что она уже существует")
-//    void notCreateNewBookTest() {
-//        Book book = BookGenerator.generateBookWithIdForAll();
-//        List<Book> bookList = BookGenerator.generateBooksList();
-//        when(bookRepository.findAll()).thenReturn(bookList);
-//        bookService.createNewBook(book, Boolean.TRUE);
-//        verify(bookRepository, times(0)).save(book);
-//        verify(bookRepository, times(0)).insertWithExistingAuthorOrGenre(book);
-//    }
+
+    @Test
+    @DisplayName("не создать новую книгу, потому что она уже существует")
+    void notCreateNewBookTest() {
+        Book book = BookGenerator.generateBookWithIdForAll();
+        List<Book> bookList = BookGenerator.generateBooksList();
+        when(bookRepository.findAll()).thenReturn(bookList);
+        assertThatThrownBy(() -> bookService.createNewBook(book, Boolean.TRUE))
+                .isInstanceOf(ImpossibilityCreationException.class);
+   }
 
     @Test
     @DisplayName("удалить книгу по ID")

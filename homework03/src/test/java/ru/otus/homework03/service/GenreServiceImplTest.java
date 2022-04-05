@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.GenreRepository;
 import ru.otus.homework03.domain.Genre;
 import ru.otus.homework03.generator.GenreGenerator;
@@ -13,6 +14,7 @@ import ru.otus.homework03.generator.GenreGenerator;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -66,8 +68,8 @@ class GenreServiceImplTest {
         Genre genre = GenreGenerator.generateGenre();
         Optional<Genre> optionalGenre = GenreGenerator.generateOptionalGenre();
         when(genreRepository.findGenreByGenreName(any())).thenReturn(optionalGenre);
-        genreService.createNewGenre(genre);
-        verify(genreRepository, times(0)).save(genre);
+        assertThatThrownBy(() -> genreService.createNewGenre(genre))
+                .isInstanceOf(ImpossibilityCreationException.class);
     }
 
     @Test
@@ -85,5 +87,13 @@ class GenreServiceImplTest {
         List<Genre> actualGenresList = genreService.getAllGenres();
         assertEquals(expectedGenresList, actualGenresList);
         verify(genreRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("найти жанр по ID")
+    void findGenreById() {
+        when(genreRepository.findById(any())).thenReturn(GenreGenerator.generateOptionalGenre());
+        genreService.findGenreById(1L);
+        verify(genreRepository, times(1)).findById(any());
     }
 }

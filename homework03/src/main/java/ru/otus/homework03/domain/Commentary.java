@@ -25,4 +25,10 @@ public class Commentary {
     @ManyToOne(targetEntity = Book.class)
     @JoinColumn(name = "book_id")
     private Book book;
+
+    public Commentary(String name, String content, Book book) {
+        this.name = name;
+        this.content = content;
+        this.book = book;
+    }
 }

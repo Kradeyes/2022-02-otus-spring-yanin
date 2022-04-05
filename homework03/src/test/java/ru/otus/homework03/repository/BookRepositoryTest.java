@@ -7,11 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.domain.Book;
-import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.domain.Genre;
-import ru.otus.homework03.generator.BookGenerator;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

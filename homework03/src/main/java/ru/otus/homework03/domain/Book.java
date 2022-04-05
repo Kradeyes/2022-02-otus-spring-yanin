@@ -26,4 +26,10 @@ public class Book {
     @ManyToOne(targetEntity = Genre.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "bookgenreid")
     private Genre genre;
+
+    public Book(String bookTitle, Author author, Genre genre) {
+        this.bookTitle = bookTitle;
+        this.author = author;
+        this.genre = genre;
+    }
 }

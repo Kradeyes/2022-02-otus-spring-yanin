@@ -2,6 +2,7 @@ package ru.otus.homework03.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.AuthorRepository;
 import ru.otus.homework03.domain.Author;
 
@@ -14,6 +15,11 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     @Override
+    public Optional<Author> findAuthorById(long authorId) {
+        return authorRepository.findById(authorId);
+    }
+
+    @Override
     public long getIdByAuthorNameAndSurname(String name, String surname) {
         long id = 0;
         Optional<Author> author = authorRepository.findAuthorByNameAndSurname(name, surname);
@@ -24,10 +30,14 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void createNewAuthor(Author author) {
+    public Author createNewAuthor(Author author) {
+        Author createdAuthor;
         if (!checkTheExistenceOfTheAuthor(author.getName(), author.getSurname())) {
-            authorRepository.save(author);
+            createdAuthor = authorRepository.save(author);
+        } else {
+            throw new ImpossibilityCreationException();
         }
+        return createdAuthor;
     }
 
     @Override

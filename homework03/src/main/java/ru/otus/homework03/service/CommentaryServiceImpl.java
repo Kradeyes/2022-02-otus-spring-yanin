@@ -2,6 +2,7 @@ package ru.otus.homework03.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.CommentaryRepository;
 import ru.otus.homework03.domain.Commentary;
 
@@ -14,10 +15,19 @@ public class CommentaryServiceImpl implements CommentaryService {
     private final CommentaryRepository commentaryRepository;
 
     @Override
-    public void createNewCommentary(Commentary commentary) {
+    public Optional<Commentary> findCommentaryById(long commentaryId) {
+        return commentaryRepository.findById(commentaryId);
+    }
+
+    @Override
+    public Commentary createNewCommentary(Commentary commentary) {
+        Commentary createdCommentary;
         if (!checkTheExistenceOfTheCommentary(commentary.getName())) {
-            commentaryRepository.save(commentary);
+            createdCommentary = commentaryRepository.save(commentary);
+        } else {
+            throw new ImpossibilityCreationException();
         }
+        return createdCommentary;
     }
 
     @Override

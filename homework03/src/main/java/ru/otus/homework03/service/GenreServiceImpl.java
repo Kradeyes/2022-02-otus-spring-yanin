@@ -2,6 +2,7 @@ package ru.otus.homework03.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.GenreRepository;
 import ru.otus.homework03.domain.Genre;
 
@@ -14,6 +15,11 @@ public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
     @Override
+    public Optional<Genre> findGenreById(long genreId) {
+        return genreRepository.findById(genreId);
+    }
+
+    @Override
     public long getIdByGenreName(String name) {
         long id = 0;
         Optional<Genre> genre = genreRepository.findGenreByGenreName(name);
@@ -24,10 +30,14 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void createNewGenre(Genre genre) {
+    public Genre createNewGenre(Genre genre) {
+        Genre createdGenre;
         if (!checkTheExistenceOfAGenre(genre.getGenreName())) {
-            genreRepository.save(genre);
+            createdGenre = genreRepository.save(genre);
+        } else {
+            throw new ImpossibilityCreationException();
         }
+        return createdGenre;
     }
 
     @Override

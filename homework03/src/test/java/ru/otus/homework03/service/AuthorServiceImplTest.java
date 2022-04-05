@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.AuthorRepository;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.generator.AuthorGenerator;
@@ -13,6 +14,7 @@ import ru.otus.homework03.generator.AuthorGenerator;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -30,6 +32,13 @@ class AuthorServiceImplTest {
         authorService = new AuthorServiceImpl(authorRepository);
     }
 
+    @Test
+    @DisplayName("найти автора по ID")
+    void findAuthorByIdTest() {
+        when(authorRepository.findById(any())).thenReturn(AuthorGenerator.generateOptionalAuthor());
+        authorService.findAuthorById(1L);
+        verify(authorRepository, times(1)).findById(any());
+    }
 
     @Test
     @DisplayName("найти ID автора и вернуть его")
@@ -67,8 +76,8 @@ class AuthorServiceImplTest {
         Author author = AuthorGenerator.generateAuthor();
         Optional<Author> optionalAuthor = AuthorGenerator.generateOptionalAuthor();
         when(authorRepository.findAuthorByNameAndSurname(any(), any())).thenReturn(optionalAuthor);
-        authorService.createNewAuthor(author);
-        verify(authorRepository, times(0)).save(author);
+        assertThatThrownBy(() -> authorService.createNewAuthor(author))
+                .isInstanceOf(ImpossibilityCreationException.class);
     }
 
 

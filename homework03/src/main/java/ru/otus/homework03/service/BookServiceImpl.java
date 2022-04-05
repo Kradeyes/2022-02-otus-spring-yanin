@@ -2,6 +2,7 @@ package ru.otus.homework03.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.homework03.exception.ImpossibilityCreationException;
 import ru.otus.homework03.repository.BookRepository;
 import ru.otus.homework03.domain.Book;
 
@@ -19,6 +20,11 @@ public class BookServiceImpl implements BookService {
     private EntityManager em;
 
     @Override
+    public Optional<Book> findBookById(long bookId) {
+        return bookRepository.findById(bookId);
+    }
+
+    @Override
     public boolean checkTheExistenceOfABookByGenreId(long bookGenreId) {
         Optional<Book> book = bookRepository.findBookByGenre_Id(bookGenreId);
         return book.isPresent();
@@ -27,6 +33,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public boolean checkTheExistenceOfABookByAuthorId(long bookAuthorId) {
         Optional<Book> book = bookRepository.findBookByAuthor_Id(bookAuthorId);
+        System.out.println(book.isPresent());
         return book.isPresent();
     }
 
@@ -41,14 +48,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void createNewBook(Book book, boolean existingAuthorOrGenre) {
+    public Book createNewBook(Book book, boolean existingAuthorOrGenre) {
         boolean bookExist = checkTheExistenceOfABook(book);
-        if (!bookExist && !existingAuthorOrGenre) {
-            bookRepository.save(book);
+        Book createdBook = new Book();
+        if (bookExist) {
+            throw new ImpossibilityCreationException();
         }
-        if (!bookExist && existingAuthorOrGenre) {
-            em.merge(book);
+        if (!existingAuthorOrGenre) {
+            createdBook = bookRepository.save(book);
         }
+        if (existingAuthorOrGenre) {
+            createdBook = em.merge(book);
+        }
+        return createdBook;
     }
 
     @Override
@@ -64,7 +76,8 @@ public class BookServiceImpl implements BookService {
     private boolean checkTheExistenceOfABook(Book book) {
         List<Book> bookList = bookRepository.findAll();
         boolean rsl = false;
-        Optional<Book> optionalBook = bookList.stream().filter(x -> x.equals(book)).findFirst();
+        Optional<Book> optionalBook = bookList.stream().filter(x -> x.getBookTitle().equals(book.getBookTitle())
+                && x.getAuthor().equals(book.getAuthor()) && x.getGenre().equals(book.getGenre())).findFirst();
         if (optionalBook.isPresent()) {
             rsl = true;
         }

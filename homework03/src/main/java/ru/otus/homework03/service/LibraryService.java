@@ -1,33 +1,51 @@
 package ru.otus.homework03.service;
 
-import org.springframework.context.MessageSource;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.domain.Book;
 import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.domain.Genre;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface LibraryService {
-    void createNewGenre(Genre genre);
+    Genre createNewGenre(Genre genre);
 
-    void deleteGenre(String genreName, MessageSource messageSource);
+    Optional<Genre> getGenreById(long id);
 
-    void showAllGenres(MessageSource messageSource);
+    List<Genre> getAllGenres();
 
-    void createNewAuthor(Author author);
+    Genre updateGenre(Genre genre);
 
-    void deleteAuthor(String authorName, String authorSurname, MessageSource messageSource);
+    void deleteGenreById(long id);
 
-    void showAllAuthors(MessageSource messageSource);
+    Author createNewAuthor(Author author);
 
-    void createNewBook(Book book);
+    Optional<Author> getAuthorById(long id);
 
-    void deleteBook(String bookTitle, String authorName, String authorSurname, String genreName, MessageSource messageSource);
+    List<Author> getAllAuthors();
 
-    void showAllBooks(MessageSource messageSource);
+    Author updateAuthor(Author author);
 
-    void createNewCommentary(Commentary commentary, Book book, MessageSource messageSource);
+    void deleteAuthorById(long id);
 
-    void deleteCommentary(String name, MessageSource messageSource);
+    Book createNewBook(Book book);
 
-    void showAllCommentariesByBookId(Book book, MessageSource messageSource);
+    Optional<Book> getBookById(long id);
+
+    List<Book> getAllBooks();
+
+    Book updateBook(Book book);
+
+    void deleteBookById(long id);
+
+    Commentary createNewCommentary(Commentary commentary);
+
+    Optional<Commentary> getCommentaryById(long id);
+
+    List<Commentary> getAllCommentariesByBookId(long id);
+
+    Commentary updateCommentary(Commentary commentary);
+
+    void deleteCommentaryById(long id);
 }
