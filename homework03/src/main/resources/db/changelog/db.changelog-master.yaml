@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/data/genresTableFill.xml
   - include:
       file: db/changelog/data/booksTableFill.xml
+  - include:
+      file: db/changelog/data/commentariesTableFill.xml
