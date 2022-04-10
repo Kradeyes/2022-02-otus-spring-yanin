@@ -13,6 +13,6 @@ public class ScannerService {
     }
 
     public String userInput() {
-        return scanner.next();
+        return scanner.nextLine();
     }
 }

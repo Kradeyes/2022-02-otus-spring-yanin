@@ -22,7 +22,7 @@ public class Commentary {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(targetEntity = Book.class)
+    @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 }

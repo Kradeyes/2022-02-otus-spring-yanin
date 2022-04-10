@@ -7,11 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.domain.Book;
-import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.domain.Genre;
-import ru.otus.homework03.generator.BookGenerator;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,14 +42,14 @@ class BookRepositoryTest {
     @Test
     @DisplayName("находить книгу в БД по ID автора")
     void findBookByAuthor_Id() {
-        Optional<Book> book = bookRepository.findBookByAuthor_Id(1L);
+        Optional<Book> book = bookRepository.findBookByAuthor_Id(2L);
         assertEquals(Boolean.TRUE, book.isPresent());
     }
 
     @Test
     @DisplayName("находить книгу в БД по ID жанра")
     void findBookByGenre_Id() {
-        Optional<Book> book = bookRepository.findBookByGenre_Id(1L);
+        Optional<Book> book = bookRepository.findBookByGenre_Id(2L);
         assertEquals(Boolean.TRUE, book.isPresent());
     }
 }

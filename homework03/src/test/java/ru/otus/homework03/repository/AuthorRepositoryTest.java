@@ -29,10 +29,10 @@ class AuthorRepositoryTest {
     @Test
     @DisplayName("удалять автора из БД")
     void deleteByIdTest() {
-        authorRepository.save(new Author(2, "Ivann", "Ivanov"));
+        authorRepository.save(new Author(3, "Ivann", "Ivanov"));
         Optional<Author> savedAuthor = authorRepository.findAuthorByNameAndSurname("Ivann", "Ivanov");
         assertEquals(Boolean.TRUE, savedAuthor.isPresent());
-        authorRepository.deleteById(2L);
+        authorRepository.deleteById(3L);
         Optional<Author> deletedAuthor = authorRepository.findAuthorByNameAndSurname("Ivann", "Ivanov");
         assertEquals(Boolean.FALSE, deletedAuthor.isPresent());
     }
