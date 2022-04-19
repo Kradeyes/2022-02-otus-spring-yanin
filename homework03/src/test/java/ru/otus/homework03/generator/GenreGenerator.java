@@ -4,6 +4,7 @@ import ru.otus.homework03.domain.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GenreGenerator {
     public static Genre generateGenre() {
@@ -17,5 +18,10 @@ public class GenreGenerator {
         Genre genre = new Genre(1, "Horror");
         genresList.add(genre);
         return genresList;
+    }
+
+    public static Optional<Genre> generateOptionalGenre() {
+        Genre genre = new Genre(1, "Horror");
+        return Optional.of(genre);
     }
 }

@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="userTableFill" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="users"/>
+        </preConditions>
+        <loadData file="db/changelog/data/usersTableFill.csv" tableName="users" separator=";">
+            <column name="id" type="bigint"/>
+            <column name="login" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="role" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

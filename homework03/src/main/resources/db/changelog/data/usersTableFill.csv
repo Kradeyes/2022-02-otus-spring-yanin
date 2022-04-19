@@ -1,0 +1,3 @@
+id;login;password;role;status
+1;admin;$2a$12$KP/N.FatMsnMW.bZVE2A/.6zegHdmQxiPYY0TqEHCVamEJ3.0u3aO;ADMIN;ACTIVE
+2;user;$2a$12$qNfmv8XDMT24amiy28g49u4gfh4LSAWmrJj6mvwIY7IyDWeOIatBi;USER;ACTIVE
