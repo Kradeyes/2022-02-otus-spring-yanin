@@ -1,0 +1,17 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="authorsTableFill" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="authors"/>
+        </preConditions>
+        <loadData file="db/changelog/data/authorsTableFill.csv" tableName="authors" separator=";">
+            <column name="id" type="bigint"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="surname" type="varchar(255)"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog> 

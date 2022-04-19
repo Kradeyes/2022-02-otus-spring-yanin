@@ -42,14 +42,14 @@ class BookRepositoryTest {
     @Test
     @DisplayName("находить книгу в БД по ID автора")
     void findBookByAuthor_Id() {
-        Optional<Book> book = bookRepository.findBookByAuthor_Id(1L);
+        Optional<Book> book = bookRepository.findBookByAuthor_Id(2L);
         assertEquals(Boolean.TRUE, book.isPresent());
     }
 
     @Test
     @DisplayName("находить книгу в БД по ID жанра")
     void findBookByGenre_Id() {
-        Optional<Book> book = bookRepository.findBookByGenre_Id(1L);
+        Optional<Book> book = bookRepository.findBookByGenre_Id(2L);
         assertEquals(Boolean.TRUE, book.isPresent());
     }
 }

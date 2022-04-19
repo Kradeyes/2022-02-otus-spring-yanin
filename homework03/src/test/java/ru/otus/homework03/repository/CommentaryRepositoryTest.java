@@ -23,7 +23,7 @@ class CommentaryRepositoryTest {
     @DisplayName("находить комментарий в БД пой ID книги")
     void findCommentariesByBook_Id() {
         List<Commentary> commentaries = commentaryRepository.findCommentariesByBook_Id(1L);
-        assertEquals(1, commentaries.size());
+        assertEquals(3, commentaries.size());
     }
 
     @Test

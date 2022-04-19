@@ -28,10 +28,10 @@ class GenreRepositoryTest {
     @Test
     @DisplayName("находить удалять жанр из БД")
     void deleteGenreByIdTest() {
-        genreRepository.save(new Genre(2, "Horror1"));
+        genreRepository.save(new Genre(3, "Horror1"));
         Optional<Genre> savedGenre = genreRepository.findGenreByGenreName("Horror1");
         assertEquals(Boolean.TRUE, savedGenre.isPresent());
-        genreRepository.deleteById(2L);
+        genreRepository.deleteById(3L);
         Optional<Genre> deletedGenre = genreRepository.findGenreByGenreName("Horror1");
         assertEquals(Boolean.FALSE, deletedGenre.isPresent());
     }

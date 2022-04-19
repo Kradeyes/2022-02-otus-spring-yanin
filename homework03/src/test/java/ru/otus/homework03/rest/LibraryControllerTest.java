@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.domain.Book;
@@ -21,6 +23,7 @@ import ru.otus.homework03.generator.AuthorGenerator;
 import ru.otus.homework03.generator.BookGenerator;
 import ru.otus.homework03.generator.CommentaryGenerator;
 import ru.otus.homework03.generator.GenreGenerator;
+import ru.otus.homework03.security.UserDetailsServiceImpl;
 import ru.otus.homework03.service.LibraryService;
 
 import java.util.List;
@@ -39,6 +42,9 @@ class LibraryControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean(name = "userDetailsServiceImpl")
+    private UserDetailsService userDetailsService;
+
     @MockBean
     private LibraryService libraryService;
     @MockBean
@@ -56,6 +62,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("создать нового автора")
     void createNewAuthor() throws Exception {
         Author author = new Author("Test", "Test");
@@ -71,6 +81,10 @@ class LibraryControllerTest {
 
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать автора по ID")
     void getAuthorById() throws Exception {
         given(libraryService.getAuthorById(1L)).willReturn(AuthorGenerator.generateOptionalAuthor());
@@ -82,6 +96,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать список авторов")
     void getAllAuthors() throws Exception {
         given(libraryService.getAllAuthors()).willReturn(AuthorGenerator.generateAuthorsList());
@@ -94,6 +112,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("обновлять автора")
     void updateAuthor() throws Exception {
         Author author = new Author(1L, "Test", "Test");
@@ -108,6 +130,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("удалять автора по ID")
     void deleteAuthor() throws Exception {
         given(libraryService.getAuthorById(1L)).willReturn(AuthorGenerator.generateOptionalAuthor());
@@ -118,6 +144,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("создать новый жанр")
     void createNewGenre() throws Exception {
         Genre genre = new Genre("Test");
@@ -132,6 +162,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать жанр по ID")
     void getGenreById() throws Exception {
         given(libraryService.getGenreById(1L)).willReturn(GenreGenerator.generateOptionalGenre());
@@ -143,6 +177,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать список жанров")
     void getAllGenres() throws Exception {
         given(libraryService.getAllGenres()).willReturn(GenreGenerator.generateGenresList());
@@ -155,6 +193,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("обновлять жанр")
     void updateGenre() throws Exception {
         Genre genre = new Genre(1L, "Test");
@@ -169,6 +211,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("удалять жанр по ID")
     void deleteGenre() throws Exception {
         given(libraryService.getGenreById(1L)).willReturn(GenreGenerator.generateOptionalGenre());
@@ -179,6 +225,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("создать новый комментарий")
     void createNewCommentary() throws Exception {
         Commentary commentary = new Commentary("Test", "Test", BookGenerator.generateBookWithIdForAll());
@@ -195,6 +245,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать комментарий по ID")
     void getCommentaryById() throws Exception {
         given(libraryService.getCommentaryById(1L)).willReturn(CommentaryGenerator.generateOptionalCommentary());
@@ -206,6 +260,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать список комментариев по ID книги")
     void getAllCommentary() throws Exception {
         given(libraryService.getAllCommentariesByBookId(1L)).willReturn(CommentaryGenerator.generateCommentaryList());
@@ -218,6 +276,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("обновлять комментарий")
     void updateCommentary() throws Exception {
         Commentary commentary = new Commentary(1, "Test", "Test", BookGenerator.generateBookWithIdForAll());
@@ -234,6 +296,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("удалять комментарий по ID")
     void deleteCommentary() throws Exception {
         given(libraryService.getCommentaryById(1L)).willReturn(CommentaryGenerator.generateOptionalCommentary());
@@ -244,6 +310,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("создать книгу")
     void createNewBook() throws Exception {
         BookDto bookDto = new BookDto("someTitle", "Ivan", "Ivanov", "Horror");
@@ -258,6 +328,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать книгу по ID")
     void getBookById() throws Exception {
         given(libraryService.getBookById(1L)).willReturn(BookGenerator.generateOptionalBook());
@@ -269,6 +343,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:read"}
+    )
     @DisplayName("возвращать список книг")
     void getAllBooks() throws Exception {
         given(libraryService.getAllBooks()).willReturn(BookGenerator.generateBooksList());
@@ -281,6 +359,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("обновлять книгу")
     void updateBook() throws Exception {
         BookDto bookDto = new BookDto(1, "newTitle", "Test","Test","Test");
@@ -296,6 +378,10 @@ class LibraryControllerTest {
     }
 
     @Test
+    @WithMockUser(
+            username = "admin",
+            authorities = {"developers:write"}
+    )
     @DisplayName("удалять книгу по ID")
     void deleteBook() throws Exception {
         given(libraryService.getBookById(1L)).willReturn(BookGenerator.generateOptionalBook());
@@ -303,5 +389,18 @@ class LibraryControllerTest {
         mvc.perform(delete("/api/v1/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
+    }
+
+    @Test
+    @WithMockUser(
+            username = "user",
+            authorities = {"developers:read"}
+    )
+    @DisplayName("не удалять книгу из-за недостатка прав")
+    void cantDeleteBookBecauseWrongAuthorities() throws Exception {
+        given(libraryService.getBookById(1L)).willReturn(BookGenerator.generateOptionalBook());
+        BookDto expectedResult = BookDto.toDto(BookGenerator.generateOptionalBook().get());
+        mvc.perform(delete("/api/v1/book/1"))
+                .andExpect(status().isForbidden());
     }
 }
