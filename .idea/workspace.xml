@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d7ffd207-941f-4ecb-8cdb-d4567cf54d92" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/homework03/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/main/resources/db/changelog/1.0/2022-03-01--0001.xml" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/main/resources/db/changelog/1.0/2022-03-01--0001.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/main/resources/db/changelog/db.changelog-master.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/main/resources/db/changelog/db.changelog-master.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/AuthorRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/AuthorRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/BookRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/BookRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/CommentaryRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/CommentaryRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/GenreRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/repository/GenreRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/rest/LibraryControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/homework03/src/test/java/ru/otus/homework03/rest/LibraryControllerTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="d7ffd207-941f-4ecb-8cdb-d4567cf54d92" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +35,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650370743633</updated>
-      <workItem from="1650370746016" duration="704000" />
+      <workItem from="1650370746016" duration="706000" />
     </task>
     <servers />
   </component>
