@@ -1,9 +1,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="2022-03-01--0001-authorsTableCreate" author="ryanin">
         <preConditions onFail="MARK_RAN">
@@ -84,6 +82,32 @@
             </column>
             <column name="book_id" type="bigint" remarks="Идентификатор жанра">
                 <constraints nullable="false" foreignKeyName="fk_book_id" references="books(id)" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2022-03-11--0001-usersTableCreate" author="ryanin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true" remarks="Идентификатор пользователя">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(255)" remarks="Логин пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)" remarks="Пароль пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)" remarks="Роль пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="Статус пользователя">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>

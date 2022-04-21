@@ -1,0 +1,24 @@
+Index: homework03/src/main/resources/db/changelog/db.changelog-master.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>databaseChangeLog:\r\n  - includeAll:\r\n      path: db/changelog/1.0/
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/homework03/src/main/resources/db/changelog/db.changelog-master.yaml b/homework03/src/main/resources/db/changelog/db.changelog-master.yaml
+--- a/homework03/src/main/resources/db/changelog/db.changelog-master.yaml	(revision 3aca8d93b3b68c3bf4b99a2936fb388ecd20e8de)
++++ b/homework03/src/main/resources/db/changelog/db.changelog-master.yaml	(date 1650370843323)
+@@ -1,3 +1,11 @@
+ databaseChangeLog:
+   - includeAll:
+-      path: db/changelog/1.0/
+\ No newline at end of file
++      path: db/changelog/1.0
++  - include:
++      file: db/changelog/data/authorsTableFill.xml
++  - include:
++      file: db/changelog/data/genresTableFill.xml
++  - include:
++      file: db/changelog/data/booksTableFill.xml
++  - include:
++      file: db/changelog/data/commentariesTableFill.xml

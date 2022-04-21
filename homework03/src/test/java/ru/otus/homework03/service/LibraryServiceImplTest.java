@@ -11,14 +11,14 @@ import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.domain.Book;
 import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.domain.Genre;
+import ru.otus.homework03.exception.ImpossibilityDeleteException;
 import ru.otus.homework03.generator.AuthorGenerator;
 import ru.otus.homework03.generator.BookGenerator;
 import ru.otus.homework03.generator.CommentaryGenerator;
 import ru.otus.homework03.generator.GenreGenerator;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
@@ -53,43 +53,43 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("удалить жанр")
     void deleteGenreTest() {
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.checkTheExistenceOfABookByGenreId(1L)).thenReturn(false);
-        libraryService.deleteGenre("Horror", messageSource);
+        libraryService.deleteGenreById(1L);
         verify(genreService, times(1)).deleteGenre(1L);
     }
 
     @Test
-    @DisplayName("не удалять жанр, потому что его не существует")
+    @DisplayName("не удалять жанр т.к. на нём завязана книга")
     void dontDeleteGenreBecauseGenreNotExistTest() {
-        when(genreService.getIdByGenreName("Horror")).thenReturn(0L);
-        when(bookService.checkTheExistenceOfABookByGenreId(0L)).thenReturn(false);
-        libraryService.deleteGenre("Horror", messageSource);
-        verify(genreService, times(0)).deleteGenre(0L);
+        when(bookService.checkTheExistenceOfABookByGenreId(1L)).thenReturn(Boolean.TRUE);
+        assertThatThrownBy(() -> libraryService.deleteGenreById(1L))
+                .isInstanceOf(ImpossibilityDeleteException.class);
     }
 
     @Test
-    @DisplayName("не удалять жанр, потому что существуют книги с этим жанром")
-    void dontDeleteGenreBecauseThereAreBooksWithThisGenreTest() {
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.checkTheExistenceOfABookByGenreId(1L)).thenReturn(true);
-        libraryService.deleteGenre("Horror", messageSource);
-        verify(genreService, times(0)).deleteGenre(1L);
-    }
-
-
-    @Test
-    @DisplayName("вывести список всех жанров")
+    @DisplayName("получить список жанров")
     void showAllGenres() {
         when(genreService.getAllGenres()).thenReturn(GenreGenerator.generateGenresList());
-        libraryService.showAllGenres(messageSource);
+        libraryService.getAllGenres();
+        verify(genreService, times(1)).getAllGenres();
+    }
+    @Test
+    @DisplayName("найти жанр по ID")
+    void getGenreById() {
+        when(genreService.findGenreById(anyLong())).thenReturn(GenreGenerator.generateOptionalGenre());
+        libraryService.getGenreById(1L);
+        verify(genreService, times(1)).findGenreById(1L);
     }
 
+
     @Test
-    @DisplayName("не выводить список жанров, потому что их не существует")
-    void notShowAllGenres() {
-        when(genreService.getAllGenres()).thenReturn(new ArrayList<>());
-        libraryService.showAllGenres(messageSource);
+    @DisplayName("обновить жанр")
+    void updateGenre() {
+        Genre genreForUpdate = GenreGenerator.generateGenre();
+        genreForUpdate.setId(1L);
+        genreForUpdate.setGenreName("Drama");
+        when(genreService.findGenreById(1L)).thenReturn(GenreGenerator.generateOptionalGenre());
+        Genre updatedGenre = libraryService.updateGenre(genreForUpdate);
+        assertEquals(genreForUpdate.getGenreName(), updatedGenre.getGenreName());
     }
 
     @Test
@@ -101,44 +101,45 @@ class LibraryServiceImplTest {
     }
 
     @Test
+    @DisplayName("найти автора по ID")
+    void getAuthorById() {
+        when(authorService.findAuthorById(anyLong())).thenReturn(AuthorGenerator.generateOptionalAuthor());
+        libraryService.getAuthorById(1L);
+        verify(authorService, times(1)).findAuthorById(1L);
+    }
+
+    @Test
+    @DisplayName("получить список авторов")
+    void getAllAuthors() {
+        when(authorService.getAllAuthors()).thenReturn(AuthorGenerator.generateAuthorsList());
+        libraryService.getAllAuthors();
+        verify(authorService, times(1)).getAllAuthors();
+    }
+
+    @Test
+    @DisplayName("обновить автора")
+    void updateAuthor() {
+        Author authorForUpdate = AuthorGenerator.generateAuthor();
+        authorForUpdate.setId(1L);
+        authorForUpdate.setSurname("Ivann");
+        when(authorService.findAuthorById(1L)).thenReturn(AuthorGenerator.generateOptionalAuthor());
+        Author updatedAuthor = libraryService.updateAuthor(authorForUpdate);
+        assertEquals(authorForUpdate.getName(), updatedAuthor.getName());
+    }
+
+    @Test
     @DisplayName("удалить автора")
     void deleteAuthor() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(bookService.checkTheExistenceOfABookByAuthorId(1L)).thenReturn(false);
-        libraryService.deleteAuthor("Ivan", "Ivanov", messageSource);
+        libraryService.deleteAuthorById(1L);
         verify(authorService, times(1)).deleteAuthor(1L);
     }
 
     @Test
-    @DisplayName("не удалять автора, потому что его не существует")
-    void notDeleteAuthorBecauseAuthorNotExistTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(0L);
-        when(bookService.checkTheExistenceOfABookByAuthorId(0L)).thenReturn(false);
-        libraryService.deleteAuthor("Ivan", "Ivanov", messageSource);
-        verify(authorService, times(0)).deleteAuthor(0L);
-    }
-
-    @Test
-    @DisplayName("не удалять автора, потому что существуют книги с этим автором")
-    void notDeleteAuthorBecauseThereAreBooksWithThisAuthorTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(bookService.checkTheExistenceOfABookByAuthorId(1L)).thenReturn(true);
-        libraryService.deleteAuthor("Ivan", "Ivanov", messageSource);
-        verify(authorService, times(0)).deleteAuthor(1L);
-    }
-
-    @Test
-    @DisplayName("вывести список всех авторов")
-    void showAllAuthors() {
-        when(authorService.getAllAuthors()).thenReturn(AuthorGenerator.generateAuthorsList());
-        libraryService.showAllAuthors(messageSource);
-    }
-
-    @Test
-    @DisplayName("не выводить список авторов, потому что их не существует")
-    void notShowAllAuthors() {
-        when(authorService.getAllAuthors()).thenReturn(new ArrayList<>());
-        libraryService.showAllAuthors(messageSource);
+    @DisplayName("не удалять автора т.к. на нём завязана книга")
+    void deleteAuthorFail() {
+        when(bookService.checkTheExistenceOfABookByAuthorId(1L)).thenReturn(Boolean.TRUE);
+        assertThatThrownBy(() -> libraryService.deleteAuthorById(1L))
+                .isInstanceOf(ImpossibilityDeleteException.class);
     }
 
     @Test
@@ -154,94 +155,75 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("удалить книгу")
     void deleteBookTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
-        libraryService.deleteBook("someTitle", "Ivan", "Ivanov", "Horror", messageSource);
+        libraryService.deleteBookById(1L);
         verify(bookService, times(1)).deleteBook(1L);
     }
 
     @Test
-    @DisplayName("не удалять книгу, потому что её не существует")
-    void notDeleteBookBecauseBookNotExistTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(0L);
-        libraryService.deleteBook("someTitle", "Ivan", "Ivanov", "Horror", messageSource);
-        verify(bookService, times(0)).deleteBook(0L);
-    }
-
-    @Test
-    @DisplayName("вывести список всех книг")
+    @DisplayName("получить список всех книг")
     void showAllBooksTest() {
         when(bookService.getAllBooks()).thenReturn(BookGenerator.generateBooksList());
-        libraryService.showAllBooks(messageSource);
-    }
-
-    @Test
-    @DisplayName("не выводить список книг, потому что их не существует")
-    void notShowAllBooksTest() {
-        when(bookService.getAllBooks()).thenReturn(new ArrayList<>());
-        libraryService.showAllBooks(messageSource);
+        libraryService.getAllBooks();
+        verify(bookService, times(1)).getAllBooks();
     }
 
     @Test
     @DisplayName("создать новый комментарий")
     void createNewCommentaryTest() {
         Commentary finalCommentary = CommentaryGenerator.generateCommentary();
-        finalCommentary.setBook(BookGenerator.generateBookWithIdForAll());
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
-        libraryService.createNewCommentary(CommentaryGenerator.generateCommentary(), BookGenerator.generateBook(), messageSource);
+        when(commentaryService.createNewCommentary(any())).thenReturn(finalCommentary);
+        libraryService.createNewCommentary(CommentaryGenerator.generateCommentary());
         verify(commentaryService, times(1)).createNewCommentary(finalCommentary);
-    }
-
-    @Test
-    @DisplayName("не создавать новый комментарий, потому что книги не существует")
-    void notCreateNewCommentaryTest() {
-        Commentary finalCommentary = CommentaryGenerator.generateCommentary();
-        finalCommentary.setBook(BookGenerator.generateBookWithIdForAll());
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(0L);
-        libraryService.createNewCommentary(CommentaryGenerator.generateCommentary(), BookGenerator.generateBook(), messageSource);
-        verify(commentaryService, times(0)).createNewCommentary(finalCommentary);
     }
 
     @Test
     @DisplayName("удалить комментарий")
     void deleteCommentaryTest() {
-        when(commentaryService.getIdByCommentaryName(any())).thenReturn(1L);
-        libraryService.deleteCommentary("good comment", messageSource);
+        libraryService.deleteCommentaryById(1L);
         verify(commentaryService, times(1)).deleteCommentary(1L);
-    }
-
-    @Test
-    @DisplayName("не удалять комментарий, потому что его не существует")
-    void dontDeleteCommentaryBecauseCommentaryNotExistTest() {
-        when(commentaryService.getIdByCommentaryName(any())).thenReturn(0L);
-        libraryService.deleteCommentary("good comment", messageSource);
-        verify(commentaryService, times(0)).deleteCommentary(0L);
     }
 
     @Test
     @DisplayName("вывести список всех комментариев для книги")
     void showAllCommentaryForBookTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
-        when(commentaryService.getAllCommentariesByBookId(1L)).thenReturn(CommentaryGenerator.generateCommentaryList());
-        libraryService.showAllCommentariesByBookId(BookGenerator.generateBook(), messageSource);
+        when(commentaryService.getAllCommentariesByBookId(anyLong())).thenReturn(CommentaryGenerator.generateCommentaryList());
+        libraryService.getAllCommentariesByBookId(1L);
+        verify(commentaryService, times(1)).getAllCommentariesByBookId(1L);
     }
 
     @Test
-    @DisplayName("не выводить список комментариев, потому что их не существует")
-    void notShowAllCommentaryForBookTest() {
-        when(authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov")).thenReturn(1L);
-        when(genreService.getIdByGenreName("Horror")).thenReturn(1L);
-        when(bookService.getIdByBookTitleAndBookAuthorIdAndBookGenreId("someTitle", 1L, 1L)).thenReturn(1L);
-        when(commentaryService.getAllCommentariesByBookId(1L)).thenReturn(new ArrayList<>());
-        libraryService.showAllCommentariesByBookId(BookGenerator.generateBook(), messageSource);
+    @DisplayName("обновить книгу")
+    void updateBook() {
+        Book bookForUpdate = BookGenerator.generateBookWithIdForAll();
+        bookForUpdate.setBookTitle("newTitle");
+        when(bookService.findBookById(1L)).thenReturn(BookGenerator.generateOptionalBook());
+        Book updatedBook = libraryService.updateBook(bookForUpdate);
+        assertEquals(bookForUpdate.getBookTitle(), updatedBook.getBookTitle());
+    }
+
+    @Test
+    @DisplayName("найти книгу по ID")
+    void getBookById() {
+        when(bookService.findBookById(anyLong())).thenReturn(BookGenerator.generateOptionalBook());
+        libraryService.getBookById(1L);
+        verify(bookService, times(1)).findBookById(1L);
+    }
+
+    @Test
+    @DisplayName("обновить комментарий")
+    void getCommentaryById() {
+        Commentary commentaryForUpdate = CommentaryGenerator.generateOptionalCommentary().get();
+        commentaryForUpdate.setName("new");
+        when(commentaryService.findCommentaryById(1L)).thenReturn(CommentaryGenerator.generateOptionalCommentary());
+        Commentary updatedCommentary = libraryService.updateCommentary(commentaryForUpdate);
+        assertEquals(commentaryForUpdate.getName(), updatedCommentary.getName());
+    }
+
+    @Test
+    @DisplayName("найти комментарий по ID")
+    void updateCommentary() {
+        when(commentaryService.findCommentaryById(anyLong())).thenReturn(CommentaryGenerator.generateOptionalCommentary());
+        libraryService.getCommentaryById(1L);
+        verify(commentaryService, times(1)).findCommentaryById(1L);
     }
 }

@@ -4,6 +4,7 @@ import ru.otus.homework03.domain.Author;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AuthorGenerator {
     public static Author generateAuthor() {
@@ -18,5 +19,10 @@ public class AuthorGenerator {
         Author author = new Author(1, "Ivan", "Ivanov");
         authorList.add(author);
         return authorList;
+    }
+
+    public static Optional<Author> generateOptionalAuthor() {
+        Author author = new Author(1, "Ivan", "Ivanov");
+        return Optional.of(author);
     }
 }
