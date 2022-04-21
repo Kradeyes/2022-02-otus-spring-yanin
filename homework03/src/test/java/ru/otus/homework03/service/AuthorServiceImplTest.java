@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.homework03.dao.AuthorDao;
+import ru.otus.homework03.repository.AuthorRepository;
 import ru.otus.homework03.domain.Author;
 import ru.otus.homework03.generator.AuthorGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,55 +21,54 @@ import static org.mockito.Mockito.*;
 @DisplayName("Класс сервиса авторов должен: ")
 class AuthorServiceImplTest {
     @Mock
-    private AuthorDao authorDao;
+    private AuthorRepository authorRepository;
 
     private AuthorService authorService;
 
     @BeforeEach
     void setUp() {
-        authorService = new AuthorServiceImpl(authorDao);
+        authorService = new AuthorServiceImpl(authorRepository);
     }
 
 
     @Test
     @DisplayName("найти ID автора и вернуть его")
     void getIdByAuthorNameAndSurnameWithFoundIdTest() {
-        List<Author> authorList = AuthorGenerator.generateAuthorsList();
+        Optional<Author> author = AuthorGenerator.generateOptionalAuthor();
         long expectedAuthorId = 1;
-        when(authorDao.getAuthorListByAuthorNameAndAuthorSurname(any(), any())).thenReturn(authorList);
+        when(authorRepository.findAuthorByNameAndSurname(any(), any())).thenReturn(author);
         long actualAuthorId = authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov");
         assertEquals(expectedAuthorId, actualAuthorId);
-        verify(authorDao, times(1)).getAuthorListByAuthorNameAndAuthorSurname(any(), any());
+        verify(authorRepository, times(1)).findAuthorByNameAndSurname(any(), any());
     }
 
     @Test
     @DisplayName("не найти ID автора и вернуть 0")
     void getIdByAuthorNameAndSurnameWithNotFoundIdTest() {
-        List<Author> authorList = new ArrayList<>();
         long expectedAuthorId = 0;
-        when(authorDao.getAuthorListByAuthorNameAndAuthorSurname(any(), any())).thenReturn(authorList);
+        when(authorRepository.findAuthorByNameAndSurname(any(), any())).thenReturn(Optional.empty());
         long actualAuthorId = authorService.getIdByAuthorNameAndSurname("Ivan", "Ivanov");
         assertEquals(expectedAuthorId, actualAuthorId);
-        verify(authorDao, times(1)).getAuthorListByAuthorNameAndAuthorSurname(any(), any());
+        verify(authorRepository, times(1)).findAuthorByNameAndSurname(any(), any());
     }
 
     @Test
     @DisplayName("создать нового автора")
     void createNewAuthorTest() {
         Author author = AuthorGenerator.generateAuthor();
-        when(authorDao.getAllAuthors()).thenReturn(new ArrayList<>());
+        when(authorRepository.findAuthorByNameAndSurname(any(), any())).thenReturn(Optional.empty());
         authorService.createNewAuthor(author);
-        verify(authorDao, times(1)).insert(author);
+        verify(authorRepository, times(1)).save(author);
     }
 
     @Test
     @DisplayName("не создать нового автора, потому что он уже существует")
     void notCreateNewAuthorTest() {
         Author author = AuthorGenerator.generateAuthor();
-        List<Author> authorList = AuthorGenerator.generateAuthorsList();
-        when(authorDao.getAllAuthors()).thenReturn(authorList);
+        Optional<Author> optionalAuthor = AuthorGenerator.generateOptionalAuthor();
+        when(authorRepository.findAuthorByNameAndSurname(any(), any())).thenReturn(optionalAuthor);
         authorService.createNewAuthor(author);
-        verify(authorDao, times(0)).insert(author);
+        verify(authorRepository, times(0)).save(author);
     }
 
 
@@ -77,16 +76,16 @@ class AuthorServiceImplTest {
     @DisplayName("удалить автора по ID")
     void deleteAuthorTest() {
         authorService.deleteAuthor(1);
-        verify(authorDao, times(1)).deleteAuthorById(1);
+        verify(authorRepository, times(1)).deleteById(1);
     }
 
     @Test
     @DisplayName("вернуть список всех авторов")
     void getAllAuthorsTest() {
         List<Author> expectedAuthorsList = AuthorGenerator.generateAuthorsList();
-        when(authorDao.getAllAuthors()).thenReturn(expectedAuthorsList);
+        when(authorRepository.findAll()).thenReturn(expectedAuthorsList);
         List<Author> actualAuthorsList = authorService.getAllAuthors();
         assertEquals(expectedAuthorsList, actualAuthorsList);
-        verify(authorDao, times(1)).getAllAuthors();
+        verify(authorRepository, times(1)).findAll();
     }
 }

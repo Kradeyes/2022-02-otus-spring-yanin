@@ -8,65 +8,67 @@ import ru.otus.homework03.domain.Book;
 import ru.otus.homework03.domain.Commentary;
 import ru.otus.homework03.domain.Genre;
 import ru.otus.homework03.service.LibraryService;
+import ru.otus.homework03.service.OutputService;
 import ru.otus.homework03.service.ScannerService;
 
-import java.util.Locale;
 
 @ShellComponent
 public class ShellStarter {
     private final LibraryService service;
     private final MessageSource messageSource;
     private final ScannerService scannerService;
+    private final OutputService outputService;
 
-    public ShellStarter(LibraryService service, MessageSource messageSource, ScannerService scannerService) {
+    public ShellStarter(LibraryService service, MessageSource messageSource, ScannerService scannerService, OutputService outputService) {
         this.service = service;
         this.messageSource = messageSource;
         this.scannerService = scannerService;
+        this.outputService = outputService;
     }
 
     @ShellMethod(key = {"createNewGenre", "cng"}, value = "Сommand to create new genre")
     public void createNewGenre() {
         Genre genre = new Genre();
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         genre.setGenreName(scannerService.userInput());
         service.createNewGenre(genre);
     }
 
     @ShellMethod(key = {"deleteGenre", "dg"}, value = "Сommand delete genre")
     public void deleteGenre() {
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         String genreName = scannerService.userInput();
         service.deleteGenre(genreName, messageSource);
     }
 
     @ShellMethod(key = {"showAllGenres", "sag"}, value = "Сommand to show all genres")
     public void showAllGenres() {
-        System.out.println(messageSource.getMessage("shell.showAllGenres", null, Locale.getDefault()));
+        outputService.allGenresOutput();
         service.showAllGenres(messageSource);
     }
 
     @ShellMethod(key = {"createNewAuthor", "cna"}, value = "Сommand to create new author")
     public void createNewAuthor() {
         Author author = new Author();
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         author.setName(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         author.setSurname(scannerService.userInput());
         service.createNewAuthor(author);
     }
 
     @ShellMethod(key = {"deleteAuthor", "da"}, value = "Сommand to delete author")
     public void deleteAuthor() {
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         String authorName = scannerService.userInput();
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         String authorSurname = scannerService.userInput();
         service.deleteAuthor(authorName, authorSurname, messageSource);
     }
 
     @ShellMethod(key = {"showAllAuthors", "saa"}, value = "Сommand to show all authors")
     public void showAllAuthors() {
-        System.out.println(messageSource.getMessage("shell.showAllAuthors", null, Locale.getDefault()));
+        outputService.allAuthorsOutput();
         service.showAllAuthors(messageSource);
     }
 
@@ -75,14 +77,14 @@ public class ShellStarter {
         Book book = new Book();
         Author author = new Author();
         Genre genre = new Genre();
-        System.out.println(messageSource.getMessage("shell.bookTitle", null, Locale.getDefault()));
+        outputService.bookTitleOutput();
         book.setBookTitle(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         author.setName(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         author.setSurname(scannerService.userInput());
         book.setAuthor(author);
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         genre.setGenreName(scannerService.userInput());
         book.setGenre(genre);
         service.createNewBook(book);
@@ -90,20 +92,20 @@ public class ShellStarter {
 
     @ShellMethod(key = {"deleteBook", "db"}, value = "Сommand to delete book")
     public void deleteBook() {
-        System.out.println(messageSource.getMessage("shell.bookTitle", null, Locale.getDefault()));
+        outputService.bookTitleOutput();
         String bookTitle = scannerService.userInput();
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         String authorName = scannerService.userInput();
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         String authorSurname = scannerService.userInput();
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         String genreName = scannerService.userInput();
         service.deleteBook(bookTitle, authorName, authorSurname, genreName, messageSource);
     }
 
     @ShellMethod(key = {"showAllBooks", "sab"}, value = "Сommand to show all books")
     public void showAllBooks() {
-        System.out.println(messageSource.getMessage("shell.showAllBooks", null, Locale.getDefault()));
+        outputService.allBooksOutput();
         service.showAllBooks(messageSource);
     }
 
@@ -113,19 +115,19 @@ public class ShellStarter {
         Author author = new Author();
         Genre genre = new Genre();
         Commentary commentary = new Commentary();
-        System.out.println(messageSource.getMessage("shell.bookTitle", null, Locale.getDefault()));
+        outputService.bookTitleOutput();
         book.setBookTitle(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         author.setName(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         author.setSurname(scannerService.userInput());
         book.setAuthor(author);
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         genre.setGenreName(scannerService.userInput());
         book.setGenre(genre);
-        System.out.println(messageSource.getMessage("shell.commentaryName", null, Locale.getDefault()));
+        outputService.commentaryNameOutput();
         commentary.setName(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.commentaryContent", null, Locale.getDefault()));
+        outputService.commentaryContentOutput();
         commentary.setContent(scannerService.userInput());
         service.createNewCommentary(commentary, book,messageSource);
 
@@ -133,7 +135,7 @@ public class ShellStarter {
 
     @ShellMethod(key = {"deleteCommentary", "dc"}, value = "Сommand to delete commentary")
     public void deleteCommentary() {
-        System.out.println(messageSource.getMessage("shell.commentaryName", null, Locale.getDefault()));
+        outputService.commentaryNameOutput();
         String commentaryName = scannerService.userInput();
         service.deleteCommentary(commentaryName, messageSource);
     }
@@ -143,17 +145,17 @@ public class ShellStarter {
         Book book = new Book();
         Author author = new Author();
         Genre genre = new Genre();
-        System.out.println(messageSource.getMessage("shell.bookTitle", null, Locale.getDefault()));
+        outputService.bookTitleOutput();
         book.setBookTitle(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorName", null, Locale.getDefault()));
+        outputService.authorNameOutput();
         author.setName(scannerService.userInput());
-        System.out.println(messageSource.getMessage("shell.authorSurname", null, Locale.getDefault()));
+        outputService.authorSurnameOutput();
         author.setSurname(scannerService.userInput());
         book.setAuthor(author);
-        System.out.println(messageSource.getMessage("shell.genreName", null, Locale.getDefault()));
+        outputService.genreNameOutput();
         genre.setGenreName(scannerService.userInput());
         book.setGenre(genre);
-        System.out.println(messageSource.getMessage("shell.showAllCommentaries", null, Locale.getDefault()));
+        outputService.allCommentariesOutput();
         service.showAllCommentariesByBookId(book,messageSource);
     }
 }
