@@ -17,3 +17,20 @@ spring:
 jwt:
   header: Authorization
   secret: secret
+
+logging:
+  file:
+    name: log-file.log
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+

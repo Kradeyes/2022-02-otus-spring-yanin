@@ -1,0 +1,114 @@
+2022-04-22 16:07:24.944  INFO 10324 --- [main] ru.otus.homework03.Main                  : Starting Main using Java 14.0.1 on DESKTOP-KDSIOVU with PID 10324 (C:\projects\otus_homework\homework03\target\classes started by yanin in C:\projects\otus_homework\homework03)
+2022-04-22 16:07:24.948  INFO 10324 --- [main] ru.otus.homework03.Main                  : No active profile set, falling back to 1 default profile: "default"
+2022-04-22 16:07:26.760  INFO 10324 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-22 16:07:26.840  INFO 10324 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 5 JPA repository interfaces.
+2022-04-22 16:07:27.329  INFO 10324 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-22 16:07:27.336  INFO 10324 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-22 16:07:27.337  INFO 10324 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.58]
+2022-04-22 16:07:27.460  INFO 10324 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-22 16:07:27.460  INFO 10324 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2434 ms
+2022-04-22 16:07:27.565  INFO 10324 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-04-22 16:07:27.659  INFO 10324 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-04-22 16:07:27.667  INFO 10324 --- [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2022-04-22 16:07:27.904  INFO 10324 --- [main] liquibase.database                       : Set default schema name to PUBLIC
+2022-04-22 16:07:28.057  INFO 10324 --- [main] liquibase.lockservice                    : Successfully acquired change log lock
+2022-04-22 16:07:28.085  INFO 10324 --- [main] liquibase.changelog                      : Reading resource: db/changelog/1.0/2022-03-01--0001.xml
+2022-04-22 16:07:28.489  INFO 10324 --- [main] liquibase.changelog                      : Creating database history table with name: PUBLIC.DATABASECHANGELOG
+2022-04-22 16:07:28.493  INFO 10324 --- [main] liquibase.changelog                      : Reading from PUBLIC.DATABASECHANGELOG
+2022-04-22 16:07:28.585  INFO 10324 --- [main] liquibase.changelog                      : Table authors created
+2022-04-22 16:07:28.585  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-authorsTableCreate::ryanin ran successfully in 25ms
+2022-04-22 16:07:28.603  INFO 10324 --- [main] liquibase.changelog                      : Table genres created
+2022-04-22 16:07:28.604  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-genresTableCreate::ryanin ran successfully in 7ms
+2022-04-22 16:07:28.620  INFO 10324 --- [main] liquibase.changelog                      : Table books created
+2022-04-22 16:07:28.621  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-booksTableCreate::ryanin ran successfully in 15ms
+2022-04-22 16:07:28.647  INFO 10324 --- [main] liquibase.changelog                      : Table commentaries created
+2022-04-22 16:07:28.648  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-11--0001-commentariesTableCreate::ryanin ran successfully in 24ms
+2022-04-22 16:07:28.662  INFO 10324 --- [main] liquibase.changelog                      : Table users created
+2022-04-22 16:07:28.662  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-11--0001-usersTableCreate::ryanin ran successfully in 12ms
+2022-04-22 16:07:28.676  INFO 10324 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 16:07:28.676  INFO 10324 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/authorsTableFill.csv' into table 'authors'
+2022-04-22 16:07:28.676  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/authorsTableFill.xml::authorsTableFill::ryanin ran successfully in 12ms
+2022-04-22 16:07:28.682  INFO 10324 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 16:07:28.682  INFO 10324 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/genresTableFill.csv' into table 'genres'
+2022-04-22 16:07:28.683  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/genresTableFill.xml::genresTableFill::ryanin ran successfully in 5ms
+2022-04-22 16:07:28.689  INFO 10324 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 16:07:28.689  INFO 10324 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/booksTableFill.csv' into table 'books'
+2022-04-22 16:07:28.689  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/booksTableFill.xml::booksTableFill::ryanin ran successfully in 5ms
+2022-04-22 16:07:28.697  INFO 10324 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 16:07:28.698  INFO 10324 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/commentariesTableFill.csv' into table 'commentaries'
+2022-04-22 16:07:28.699  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/commentariesTableFill.xml::commentariesTableFill::ryanin ran successfully in 7ms
+2022-04-22 16:07:28.711  INFO 10324 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 16:07:28.712  INFO 10324 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/usersTableFill.csv' into table 'users'
+2022-04-22 16:07:28.712  INFO 10324 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/usersTableFill.xml::userTableFill::ryanin ran successfully in 10ms
+2022-04-22 16:07:28.724  INFO 10324 --- [main] liquibase.lockservice                    : Successfully released change log lock
+2022-04-22 16:07:28.859  INFO 10324 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-04-22 16:07:28.913  INFO 10324 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.5.Final
+2022-04-22 16:07:29.080  INFO 10324 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-04-22 16:07:29.185  INFO 10324 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-04-22 16:07:29.664  INFO 10324 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-04-22 16:07:29.671  INFO 10324 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-04-22 16:07:30.011  WARN 10324 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-04-22 16:07:30.379  INFO 10324 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure any request
+2022-04-22 16:07:30.969  INFO 10324 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoint(s) beneath base path '/actuator'
+2022-04-22 16:07:31.029  INFO 10324 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-22 16:07:31.059  INFO 10324 --- [main] ru.otus.homework03.Main                  : Started Main in 6.715 seconds (JVM running for 7.617)
+2022-04-22 16:07:31.506  INFO 10324 --- [RMI TCP Connection(7)-169.254.175.48] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-22 16:07:31.507  INFO 10324 --- [RMI TCP Connection(7)-169.254.175.48] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-22 16:07:31.509  INFO 10324 --- [RMI TCP Connection(7)-169.254.175.48] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2022-04-22 17:54:47.337  INFO 7892 --- [main] ru.otus.homework03.Main                  : Starting Main using Java 14.0.1 on DESKTOP-KDSIOVU with PID 7892 (C:\projects\otus_homework\homework03\target\classes started by yanin in C:\projects\otus_homework\homework03)
+2022-04-22 17:54:47.341  INFO 7892 --- [main] ru.otus.homework03.Main                  : No active profile set, falling back to 1 default profile: "default"
+2022-04-22 17:54:48.427  INFO 7892 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-22 17:54:48.511  INFO 7892 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 74 ms. Found 5 JPA repository interfaces.
+2022-04-22 17:54:49.029  INFO 7892 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-22 17:54:49.038  INFO 7892 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-22 17:54:49.039  INFO 7892 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.58]
+2022-04-22 17:54:49.160  INFO 7892 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-22 17:54:49.160  INFO 7892 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1761 ms
+2022-04-22 17:54:49.261  INFO 7892 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-04-22 17:54:49.387  INFO 7892 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-04-22 17:54:49.395  INFO 7892 --- [main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2022-04-22 17:54:49.642  INFO 7892 --- [main] liquibase.database                       : Set default schema name to PUBLIC
+2022-04-22 17:54:49.830  INFO 7892 --- [main] liquibase.lockservice                    : Successfully acquired change log lock
+2022-04-22 17:54:49.856  INFO 7892 --- [main] liquibase.changelog                      : Reading resource: db/changelog/1.0/2022-03-01--0001.xml
+2022-04-22 17:54:50.319  INFO 7892 --- [main] liquibase.changelog                      : Creating database history table with name: PUBLIC.DATABASECHANGELOG
+2022-04-22 17:54:50.323  INFO 7892 --- [main] liquibase.changelog                      : Reading from PUBLIC.DATABASECHANGELOG
+2022-04-22 17:54:50.412  INFO 7892 --- [main] liquibase.changelog                      : Table authors created
+2022-04-22 17:54:50.412  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-authorsTableCreate::ryanin ran successfully in 27ms
+2022-04-22 17:54:50.430  INFO 7892 --- [main] liquibase.changelog                      : Table genres created
+2022-04-22 17:54:50.431  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-genresTableCreate::ryanin ran successfully in 9ms
+2022-04-22 17:54:50.452  INFO 7892 --- [main] liquibase.changelog                      : Table books created
+2022-04-22 17:54:50.453  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-01--0001-booksTableCreate::ryanin ran successfully in 18ms
+2022-04-22 17:54:50.472  INFO 7892 --- [main] liquibase.changelog                      : Table commentaries created
+2022-04-22 17:54:50.473  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-11--0001-commentariesTableCreate::ryanin ran successfully in 19ms
+2022-04-22 17:54:50.481  INFO 7892 --- [main] liquibase.changelog                      : Table users created
+2022-04-22 17:54:50.481  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/1.0/2022-03-01--0001.xml::2022-03-11--0001-usersTableCreate::ryanin ran successfully in 7ms
+2022-04-22 17:54:50.494  INFO 7892 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 17:54:50.495  INFO 7892 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/authorsTableFill.csv' into table 'authors'
+2022-04-22 17:54:50.495  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/authorsTableFill.xml::authorsTableFill::ryanin ran successfully in 13ms
+2022-04-22 17:54:50.501  INFO 7892 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 17:54:50.502  INFO 7892 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/genresTableFill.csv' into table 'genres'
+2022-04-22 17:54:50.503  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/genresTableFill.xml::genresTableFill::ryanin ran successfully in 6ms
+2022-04-22 17:54:50.509  INFO 7892 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 17:54:50.509  INFO 7892 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/booksTableFill.csv' into table 'books'
+2022-04-22 17:54:50.510  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/booksTableFill.xml::booksTableFill::ryanin ran successfully in 5ms
+2022-04-22 17:54:50.515  INFO 7892 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 17:54:50.516  INFO 7892 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/commentariesTableFill.csv' into table 'commentaries'
+2022-04-22 17:54:50.516  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/commentariesTableFill.xml::commentariesTableFill::ryanin ran successfully in 5ms
+2022-04-22 17:54:50.522  INFO 7892 --- [main] liquibase.statement                      : Executing JDBC DML batch was successful. 2 operations were executed, 1 individual UPDATE events were confirmed by the database.
+2022-04-22 17:54:50.522  INFO 7892 --- [main] liquibase.changelog                      : Data loaded from 'db/changelog/data/usersTableFill.csv' into table 'users'
+2022-04-22 17:54:50.522  INFO 7892 --- [main] liquibase.changelog                      : ChangeSet db/changelog/data/usersTableFill.xml::userTableFill::ryanin ran successfully in 5ms
+2022-04-22 17:54:50.524  INFO 7892 --- [main] liquibase.lockservice                    : Successfully released change log lock
+2022-04-22 17:54:50.629  INFO 7892 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-04-22 17:54:50.694  INFO 7892 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.5.Final
+2022-04-22 17:54:50.855  INFO 7892 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-04-22 17:54:50.977  INFO 7892 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-04-22 17:54:51.533  INFO 7892 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-04-22 17:54:51.540  INFO 7892 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-04-22 17:54:51.886  WARN 7892 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-04-22 17:54:52.178  INFO 7892 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will not secure any request
+2022-04-22 17:54:52.651  INFO 7892 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoint(s) beneath base path '/actuator'
+2022-04-22 17:54:52.701  INFO 7892 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-22 17:54:52.717  INFO 7892 --- [main] ru.otus.homework03.Main                  : Started Main in 5.885 seconds (JVM running for 6.823)
+2022-04-22 17:54:52.938  INFO 7892 --- [RMI TCP Connection(2)-169.254.175.48] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-22 17:54:52.939  INFO 7892 --- [RMI TCP Connection(2)-169.254.175.48] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-22 17:54:52.942  INFO 7892 --- [RMI TCP Connection(2)-169.254.175.48] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
