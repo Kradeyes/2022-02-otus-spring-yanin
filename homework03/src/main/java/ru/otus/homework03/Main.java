@@ -10,8 +10,9 @@ import ru.otus.homework03.service.GetGenreRestService;
 public class Main {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Main.class, args);
-        GetGenreRestService service = ctx.getBean(GetGenreRestService.class);
-        System.out.println(service.getGenre(1));
+        SpringApplication.run(Main.class, args);
+//        ApplicationContext ctx = SpringApplication.run(Main.class, args);
+//        GetGenreRestService service = ctx.getBean(GetGenreRestService.class);
+//        System.out.println(service.getGenre(1));
     }
 }
