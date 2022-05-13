@@ -14,6 +14,8 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+  kafka:
+    bootstrap-servers: localhost:9092
 jwt:
   header: Authorization
   secret: secret
