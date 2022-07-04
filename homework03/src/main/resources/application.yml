@@ -17,3 +17,5 @@ spring:
 jwt:
   header: Authorization
   secret: secret
+  expiration: 1000
+
